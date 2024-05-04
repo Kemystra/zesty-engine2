@@ -1,8 +1,9 @@
 use winit::event_loop::{ControlFlow, EventLoop};
 use clap::Parser;
 
-
 mod app;
+mod scene;
+mod renderer;
 
 use app::App;
 
