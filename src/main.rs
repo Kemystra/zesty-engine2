@@ -57,16 +57,7 @@ fn main() {
                     ).unwrap();
 
                     let mut buffer = surface_mut_ref.buffer_mut().unwrap();
-                    for index in 0..(width * height) {
-                        let y = (index + self.redraw_count as u32) / width;
-                        let x = (index + self.redraw_count as u32) % width;
-                        let red = x % 255;
-                        let green = y % 255;
-                        let blue = (x * y) % 255;
-
-                        buffer[index as usize] = blue | (green << 8) | (red << 16);
-                    }
-
+                    // Render here
                     buffer.present().unwrap();
 
                     self.redraw_count += 1;
