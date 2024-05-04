@@ -739,6 +739,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "obj"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "059c95245738cdc7b40078cdd51a23200252a4c0a0a6dd005136152b3f467a4a"
+
+[[package]]
 name = "objc"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1781,6 +1787,7 @@ name = "zesty_engine2"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "obj",
  "softbuffer",
  "winit",
 ]

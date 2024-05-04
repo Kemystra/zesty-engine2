@@ -7,5 +7,6 @@ description = "Minimal rasterizer with OBJ support"
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
+obj = "0.10.2"
 softbuffer = "0.4.2"
 winit = "0.30.0"
