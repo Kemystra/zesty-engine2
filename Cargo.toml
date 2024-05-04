@@ -2,6 +2,8 @@
 name = "zesty_engine2"
 version = "0.1.0"
 edition = "2021"
+authors = ["Izzminhal Akmal <programmer.coleslaw981@slmail.me>"]
+description = "Minimal rasterizer with OBJ support"
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
