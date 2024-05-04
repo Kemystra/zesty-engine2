@@ -1,10 +1,15 @@
 use winit::event_loop::{ControlFlow, EventLoop};
+use clap::Parser;
 
 
 mod app;
 
 use app::App;
 
+#[derive(Parser, Debug)]
+struct Args {
+    filename: String
+}
 
 fn main() {
     let event_loop = EventLoop::new().unwrap();
