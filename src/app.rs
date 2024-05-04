@@ -9,12 +9,25 @@ use winit::window::{Window, WindowId};
 
 use softbuffer::{Context, Surface};
 
+use crate::Arguments;
 
-#[derive(Default)]
+
 pub struct App {
     window: Option<Rc<Window>>,
     surface: Option<Surface<Rc<Window>, Rc<Window>>>,
-    redraw_count: usize
+    redraw_count: usize,
+    args: Arguments
+}
+
+impl App {
+    pub fn new(args: Arguments) -> Self {
+        Self {
+            window: None,
+            surface: None,
+            redraw_count: 0,
+            args
+        }
+    }
 }
 
 impl ApplicationHandler for App {
