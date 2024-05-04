@@ -70,9 +70,9 @@ fn main() {
                     buffer.present().unwrap();
 
                     self.redraw_count += 1;
-                    println!("Redraw count: {}, Time: {}",
+                    println!("Redraw count: {}, FPS: {}",
                         self.redraw_count,
-                        now.elapsed().as_millis()
+                        1_000_000 / now.elapsed().as_micros()
                     );
 
                 },
@@ -81,7 +81,7 @@ fn main() {
             }
         }
 
-        fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
+        fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
             self.window.as_ref().unwrap().request_redraw();
         }
     }
