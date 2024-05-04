@@ -10,13 +10,16 @@ use winit::window::{Window, WindowId};
 use softbuffer::{Context, Surface};
 
 use crate::Arguments;
+use crate::renderer::Renderer;
 
 
 pub struct App {
     window: Option<Rc<Window>>,
     surface: Option<Surface<Rc<Window>, Rc<Window>>>,
     redraw_count: usize,
-    args: Arguments
+    args: Arguments,
+
+    renderer: Renderer
 }
 
 impl App {
@@ -25,7 +28,9 @@ impl App {
             window: None,
             surface: None,
             redraw_count: 0,
-            args
+            args,
+
+            renderer: Renderer::new()
         }
     }
 }
