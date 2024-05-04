@@ -7,6 +7,7 @@ mod app;
 use app::App;
 
 #[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
 struct Arguments {
     filename: String
 }
