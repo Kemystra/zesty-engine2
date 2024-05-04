@@ -7,15 +7,15 @@ mod app;
 use app::App;
 
 #[derive(Parser, Debug)]
-struct Args {
+struct Arguments {
     filename: String
 }
 
 fn main() {
+    let args = Arguments::parse();
+    let mut app = App::new(args);
+
     let event_loop = EventLoop::new().unwrap();
-
     event_loop.set_control_flow(ControlFlow::Poll);
-
-    let mut app = App::default();
     event_loop.run_app(&mut app).unwrap();
 }
