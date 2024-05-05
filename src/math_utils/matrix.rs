@@ -13,3 +13,8 @@ pub struct Matrix4 {
     z: Vector4<f64>,
     w: Vector4<f64>
 }
+
+pub struct TransformMatrix {
+    matrix: Matrix3,
+    translation: Vector3<f64>
+}
