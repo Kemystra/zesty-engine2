@@ -1,5 +1,20 @@
 use crate::scene::Scene;
 
+
+pub struct Color(u32);
+
+impl Color {
+    pub fn from_rgb(r: u8, g: u8, b: u8) -> Self {
+        Self (
+            ((r as u32) << 16) | ((g as u32) << 8) | (b as u32)
+        )
+    }
+
+    pub fn u32_color(&self) -> u32 {
+        self.0
+    }
+}
+
 pub struct Renderer {
     buffer_width: usize,
     buffer_height: usize
