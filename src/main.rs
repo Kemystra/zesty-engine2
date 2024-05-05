@@ -4,6 +4,7 @@ use clap::Parser;
 mod app;
 mod scene;
 mod renderer;
+mod math_utils;
 
 use app::App;
 
