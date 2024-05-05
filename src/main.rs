@@ -10,7 +10,7 @@ use app::App;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Arguments {
-    filename: String
+    scene_filename: String
 }
 
 fn main() {
