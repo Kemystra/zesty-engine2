@@ -11,6 +11,7 @@ use softbuffer::{Context, Surface};
 
 use crate::Arguments;
 use crate::renderer::Renderer;
+use crate::scene::Scene;
 
 
 pub struct App {
@@ -45,6 +46,8 @@ impl ApplicationHandler for App {
         let context = Context::new(Rc::clone(&window)).unwrap();
         self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
         self.redraw_count = 0;
+
+        let scene = Scene::from_scene_file(&self.args.scene_filename);
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
