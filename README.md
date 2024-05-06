@@ -11,19 +11,19 @@
     - Parsing OBJ files should be handled by an external crate
     - Do NOT implement it; it's out of scope
 3. Basic command line interface
-    - mandatory argument `FILE` specify OBJ filepath
+    - mandatory arguments to specify scene file
 
 ## External crate list
 1. `softbuffer` - To provide drawing buffer to be passed to `winit`
 2. `winit` - To draw window (out of scope of this project)
-3. `num` - To have number types generalization
+3. `num_traits` - To have number types generalization
 4. `clap` - To parse command line arguments and options
 
 ## Implementation Steps
 1. Basic math library
-    - Vector2D<T> and Vector3D<T> (where T: float OR integer)
+    - Vector2<T> and Vector3<T> (where T: float OR integer)
         - Able to add, substract, and multiply with scalar (restricted to its type)
-    - TransformMatrix and FullMatrix (use f64 to represent values)
+    - Matrix3 and Matrix4 (use f32 to represent values), will use Vectors above
         - Methods: `apply_rotation(Quaternion q)`
     - Quaternion (fml)
         - Methods: `normalize()`
@@ -34,6 +34,7 @@
         - Will construct Softbuffer's buffer internally
         - Directly draw to Softbuffer's buffer
         - Main rendering functions goes here
+        - Receive buffer from outside, like in `biosim-rust-py`
     - Color(u8) unittype
         - Methods: `from_rgba(u8 r, u8 g, u8 b)`
 
@@ -45,6 +46,9 @@
     - Fields: `FOV: f64, near_clip_dist: f64, far_clip_dist: f64, proj_matrix: FullMatrix`
 
 5. Object
-    - Have a constructor that takes OBJ filepath
-    - Must have vertices, edges, and facets definitions
+    - Hold transform, mesh, etc.
+    - MUST have transform
 
+6. Mesh
+    - Ability to load from OBJ file
+    - Add to Object struct
