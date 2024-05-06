@@ -6,6 +6,7 @@ mod scene;
 mod renderer;
 mod math_utils;
 mod transform;
+mod object;
 
 use app::App;
 
