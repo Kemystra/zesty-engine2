@@ -1,4 +1,5 @@
 use crate::transform::Transform;
+use crate::mesh::Mesh;
 
 
 pub struct Object {
