@@ -1,6 +1,8 @@
 use super::vector::{Vector3, Vector4};
 
 
+pub(super) trait Matrix {}
+
 pub struct Matrix3 {
     x: Vector3<f32>,
     y: Vector3<f32>,
