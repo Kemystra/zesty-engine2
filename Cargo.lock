@@ -1810,3 +1810,7 @@ dependencies = [
 [[package]]
 name = "zesty_engine2_derive"
 version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
