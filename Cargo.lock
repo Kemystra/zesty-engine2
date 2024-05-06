@@ -1804,4 +1804,9 @@ dependencies = [
  "obj-rs",
  "softbuffer",
  "winit",
+ "zesty_engine2_derive",
 ]
+
+[[package]]
+name = "zesty_engine2_derive"
+version = "0.1.0"
