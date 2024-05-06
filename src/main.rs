@@ -7,6 +7,7 @@ mod renderer;
 mod math_utils;
 mod transform;
 mod object;
+mod mesh;
 
 use app::App;
 
