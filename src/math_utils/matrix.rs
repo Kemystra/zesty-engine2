@@ -2,31 +2,28 @@ use std::ops::Index;
 use std::ops::IndexMut;
 
 
-macro_rules! impl_index_mut_matrices {
-    ($Matrix:ident, $size:expr) => {
-         impl Index<usize> for $Matrix {
-            type Output = [f32; $size];
 struct Matrix<const N: usize>([[f32; N]; N]);
 
-            fn index(&self, index: usize) -> &Self::Output {
-                &self.0[index]
-            }
-        }
 pub type Matrix3 = Matrix<3>;
 pub type Matrix4 = Matrix<4>;
 
-        impl IndexMut<usize> for $Matrix {
-            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-                &mut self.0[index]
-            }
-        }
-    };
 impl<const N: usize> Matrix<N> {
     const SIZE: usize = N;
 }
 
+impl<const N: usize> Index<usize> for Matrix<N> {
+    type Output = [f32; N];
 
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
 
+impl<const N: usize> IndexMut<usize> for Matrix<N> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.0[index]
+    }
+}
 
 // 3 functions that perform the elementary row operations needed for inverting a matrix
 // 1. Swapping rows
