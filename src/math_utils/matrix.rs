@@ -2,10 +2,10 @@ use std::ops::Index;
 use std::ops::IndexMut;
 
 
-struct Matrix<const N: usize>([[f32; N]; N]);
+pub(crate) struct Matrix<const N: usize>([[f32; N]; N]);
 
-pub type Matrix3 = Matrix<3>;
-pub type Matrix4 = Matrix<4>;
+pub(crate) type Matrix3 = Matrix<3>;
+pub(crate) type Matrix4 = Matrix<4>;
 
 impl<const N: usize> Matrix<N> {
     const SIZE: usize = N;
