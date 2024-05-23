@@ -9,21 +9,15 @@ pub(crate) type Matrix4 = Matrix<4>;
 
 impl<const N: usize> Matrix<N> {
     // Const function to generate the identity matrix
-    const fn identity_matrix() -> [[f32; N]; N] {
+    pub fn identity_matrix() -> Self {
         let mut matrix = [[0.0; N]; N];
-        Self::fill_identity(&mut matrix, 0);
-        matrix
-    }
-
-    // Recursive const function to fill the identity matrix
-    const fn fill_identity(matrix: &mut [[f32; N]; N], i: usize) {
-        if i < N {
+        for i in 0..N {
             matrix[i][i] = 1.0;
-            Self::fill_identity(matrix, i + 1);
         }
+
+        Self(matrix)
     }
 
-    pub const IDENTITY: Self = Matrix(Self::identity_matrix());
     pub const SIZE: usize = N;
 }
 
