@@ -8,7 +8,23 @@ pub(crate) type Matrix3 = Matrix<3>;
 pub(crate) type Matrix4 = Matrix<4>;
 
 impl<const N: usize> Matrix<N> {
-    const SIZE: usize = N;
+    // Const function to generate the identity matrix
+    const fn identity_matrix() -> [[f32; N]; N] {
+        let mut matrix = [[0.0; N]; N];
+        Self::fill_identity(&mut matrix, 0);
+        matrix
+    }
+
+    // Recursive const function to fill the identity matrix
+    const fn fill_identity(matrix: &mut [[f32; N]; N], i: usize) {
+        if i < N {
+            matrix[i][i] = 1.0;
+            Self::fill_identity(matrix, i + 1);
+        }
+    }
+
+    pub const IDENTITY: Self = Matrix(Self::identity_matrix());
+    pub const SIZE: usize = N;
 }
 
 impl<const N: usize> Index<usize> for Matrix<N> {
