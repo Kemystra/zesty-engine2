@@ -2,6 +2,8 @@ use std::ops::Index;
 use std::ops::IndexMut;
 
 
+#[cfg_attr(test, derive(PartialEq))]
+#[derive(Clone, Debug)]
 pub(crate) struct Matrix<const N: usize>([[f32; N]; N]);
 
 pub(crate) type Matrix3 = Matrix<3>;
