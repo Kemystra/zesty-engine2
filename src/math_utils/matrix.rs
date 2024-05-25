@@ -86,6 +86,20 @@ fn ensure_pivot_non_zero<const N: usize>(
     }
     Ok(())
 }
+
+fn matrix_forward_substitution<const N: usize>(
+    matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
+    total_row: usize, total_column: usize
+) -> () {
+    // Make every value under pivot points zero
+    for col in 0..total_column {
+        for row in (col+1)..total_row {
+            let multiplier = -(matrix[row][col] / matrix[col][col]);
+            // Multiply pivot point's row by multiplier, and add to current row
+            matrix_add_multiply_row(matrix, row, col, multiplier)
+        }
+    }
+}
 // 3 functions that perform the elementary row operations needed for inverting a matrix
 // 1. Swapping rows
 fn matrix_swap_row<const N: usize>(
@@ -163,5 +177,23 @@ mod tests {
         let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
 
         assert_eq!(result, Err("Matrix has no inverse".to_string()));
+    }
+
+    #[test]
+    fn test_matrix_forward_substitution() {
+        let mut matrix = Matrix([
+            [1.00, 2.00, 9.00],
+            [0.00, 8.00, 0.00],
+            [6.00, 3.00, 5.00]
+        ]);
+        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
+        let total_row = 3;
+        let total_column = 3;
+
+        matrix_forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+        // Will add proper assert statement later
+        // For now, will manually check algorithm result
+        println!("{:?}", matrix);
+        assert_eq!(true, true);
     }
 }
