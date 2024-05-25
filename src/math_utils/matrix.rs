@@ -44,9 +44,9 @@ pub fn invert_matrix<const N: usize>(matrix: &Matrix<N>, is_homogenous: bool) ->
     let mut inv_matrix = Matrix::<N>::identity_matrix();
 
     ensure_pivot_non_zero(&mut matrix, &mut inv_matrix, total_row, total_column)?;
-    matrix_forward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
-    matrix_scale_pivot_to_one(&mut matrix, &mut inv_matrix, total_row, total_column);
-    matrix_backward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
+    forward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
+    scale_pivot_to_one(&mut matrix, &mut inv_matrix, total_row, total_column);
+    backward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
 
     Ok(inv_matrix)
 }
@@ -87,7 +87,7 @@ fn ensure_pivot_non_zero<const N: usize>(
     Ok(())
 }
 
-fn matrix_forward_substitution<const N: usize>(
+fn forward_substitution<const N: usize>(
     matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
     total_row: usize, total_column: usize
 ) -> () {
@@ -96,12 +96,12 @@ fn matrix_forward_substitution<const N: usize>(
         for row in (col+1)..total_row {
             let multiplier = -(matrix[row][col] / matrix[col][col]);
             // Multiply pivot point's row by multiplier, and add to current row
-            matrix_add_multiply_row(matrix, row, col, multiplier)
+            add_multiply_row(matrix, row, col, multiplier)
         }
     }
 }
 
-fn matrix_scale_pivot_to_one<const N: usize>(
+fn scale_pivot_to_one<const N: usize>(
     matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
     total_row: usize, total_column: usize
 ) -> () {
@@ -116,7 +116,7 @@ fn matrix_scale_pivot_to_one<const N: usize>(
     }
 }
 
-fn matrix_backward_substitution<const N: usize>(
+fn backward_substitution<const N: usize>(
     matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
     total_row: usize, total_column: usize
 ) -> () {
@@ -136,7 +136,7 @@ fn matrix_backward_substitution<const N: usize>(
 
 // 3 functions that perform the elementary row operations needed for inverting a matrix
 // 1. Swapping rows
-fn matrix_swap_row<const N: usize>(
+fn swap_row<const N: usize>(
     matrix: &mut Matrix<N>,
     row_index_1: usize,
     row_index_2: usize
@@ -147,7 +147,7 @@ fn matrix_swap_row<const N: usize>(
 }
 
 // 2. Add rows (possibly with a multiplier)
-fn matrix_add_multiply_row<const N: usize>(
+fn add_multiply_row<const N: usize>(
     matrix: &mut Matrix<N>,
     target_row_index: usize,
     add_row_index: usize,
@@ -161,7 +161,7 @@ fn matrix_add_multiply_row<const N: usize>(
 }
 
 // 3. Multiply the whole row with a scalar value
-fn matrix_scale_row<const N: usize>(
+fn scale_row<const N: usize>(
     matrix: &mut Matrix<N>,
     target_row_index: usize,
     multiplier: f32
@@ -214,7 +214,7 @@ mod tests {
     }
 
     #[test]
-    fn test_matrix_forward_substitution() {
+    fn test_forward_substitution() {
         let mut matrix = Matrix([
             [1.00, 2.00, 9.00],
             [0.00, 8.00, 0.00],
@@ -224,7 +224,7 @@ mod tests {
         let total_row = 3;
         let total_column = 3;
 
-        matrix_forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+        forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
         // Will add proper assert statement later
         // For now, will manually check algorithm result
         println!("{:?}", matrix);
@@ -242,7 +242,7 @@ mod tests {
         let total_row = 3;
         let total_column = 3;
 
-        matrix_scale_pivot_to_one(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+        scale_pivot_to_one(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
         assert_eq!(matrix, Matrix([
             [1.00, 2.00/4.00, 9.00/4.00],
             [0.00, 1.00, 7.00/8.00],
@@ -261,7 +261,7 @@ mod tests {
         let total_row = 3;
         let total_column = 3;
 
-        matrix_backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+        backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
         assert_eq!(matrix, Matrix::<3>::identity_matrix())
     }
 }
