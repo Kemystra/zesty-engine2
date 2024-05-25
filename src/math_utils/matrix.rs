@@ -36,6 +36,41 @@ impl<const N: usize> IndexMut<usize> for Matrix<N> {
     }
 }
 
+fn ensure_pivot_non_zero<const N: usize>(
+    matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
+    total_row: usize, total_column: usize
+) -> Result<(), String> {
+    for col in 0..total_column {
+        // Making sure pivot is a non-zero number
+        // If zero, swap row with one that has the biggest absolute value
+        let mut pivot = col;
+        let mut pivot_val = matrix[col][col];
+
+        if pivot_val != 0.0 {
+            return Ok(())
+        }
+
+        for row in 0..total_row {
+            if matrix[row][col].abs() > pivot_val.abs() {
+                pivot = row;
+                pivot_val = matrix[row][col];
+            }
+        }
+
+        if pivot_val == 0.0 {
+            return Err("Matrix has no inverse".to_string())
+        }
+
+        let mut tmp = matrix[pivot];
+        matrix[pivot] = matrix[col];
+        matrix[col] = tmp;
+
+        tmp = inv_matrix[pivot];
+        inv_matrix[pivot] = inv_matrix[col];
+        inv_matrix[col] = tmp;
+    }
+    Ok(())
+}
 // 3 functions that perform the elementary row operations needed for inverting a matrix
 // 1. Swapping rows
 fn matrix_swap_row<const N: usize>(
@@ -72,5 +107,46 @@ fn matrix_scale_row<const N: usize>(
 
     for col in 0..columns {
         matrix[target_row_index][col] *= multiplier;
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ensure_pivot_non_zero() {
+        let mut matrix = Matrix([
+            [1.00, 2.00, 9.00],
+            [3.00, 0.00, 8.00],
+            [6.00, 3.00, 5.00]
+        ]);
+        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
+        let total_row = 3;
+        let total_column = 3;
+        let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+
+        assert_eq!(result, Ok(()));
+        assert_eq!(matrix, Matrix([
+            [1.00, 2.00, 9.00],
+            [6.00, 3.00, 5.00],
+            [3.00, 0.00, 8.00]
+        ]))
+    }
+
+    #[test]
+    fn test_ensure_pivot_non_zero_impossible() {
+        let mut matrix = Matrix([
+            [1.00, 2.00, 9.00],
+            [0.00, 0.00, 0.00],
+            [6.00, 3.00, 5.00]
+        ]);
+        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
+        let total_row = 3;
+        let total_column = 3;
+        let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+
+        assert_eq!(result, Err("Matrix has no inverse".to_string()));
     }
 }
