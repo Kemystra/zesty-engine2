@@ -100,6 +100,22 @@ fn matrix_forward_substitution<const N: usize>(
         }
     }
 }
+
+fn matrix_scale_pivot_to_one<const N: usize>(
+    matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
+    total_row: usize, total_column: usize
+) -> () {
+    // Divide each row to turn the pivot into 1
+    for col in 0..total_column {
+        let divisor = matrix[col][col];
+        for i in 0..total_column {
+            matrix[col][i] /= divisor;
+            inv_matrix[col][i] /= divisor;
+        }
+        matrix[col][col] = 1.0;
+    }
+}
+
 // 3 functions that perform the elementary row operations needed for inverting a matrix
 // 1. Swapping rows
 fn matrix_swap_row<const N: usize>(
@@ -195,5 +211,24 @@ mod tests {
         // For now, will manually check algorithm result
         println!("{:?}", matrix);
         assert_eq!(true, true);
+    }
+
+    #[test]
+    fn test_scale_pivot_to_one() {
+        let mut matrix = Matrix([
+            [4.00, 2.00, 9.00],
+            [0.00, 8.00, 7.00],
+            [0.00, 0.00, 5.00]
+        ]);
+        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
+        let total_row = 3;
+        let total_column = 3;
+
+        matrix_scale_pivot_to_one(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
+        assert_eq!(matrix, Matrix([
+            [1.00, 2.00/4.00, 9.00/4.00],
+            [0.00, 1.00, 7.00/8.00],
+            [0.00, 0.00, 1.00]
+        ]))
     }
 }
