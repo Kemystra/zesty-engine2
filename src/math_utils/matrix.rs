@@ -252,4 +252,20 @@ mod tests {
         backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
         assert_eq!(matrix, Matrix::<3>::identity_matrix())
     }
+
+    #[test]
+    fn test_inverting_matrix() {
+        let matrix = Matrix([
+            [1.00, -3.00, 3.01],
+            [4.50, 5.00, 7.00],
+            [3.00, 97.00, 8.00]
+        ]);
+
+        let inv_matrix = matrix.invert(false).unwrap();
+        assert_eq!(inv_matrix, Matrix([
+            [-42600.00/44981.00, 63194.00/134943.00, -7210.00/134943.00],
+            [-1000.00/44981.00, -206.00/134943.00, 1309.00/134943.00],
+            [28100.00/44981.00, -21200.00/134943.00, 3700.00/134943.00]
+        ]));
+    }
 }
