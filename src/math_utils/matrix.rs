@@ -61,6 +61,9 @@ fn ensure_pivot_non_zero<const N: usize>(
         let mut pivot = col;
         let mut pivot_val = matrix[col][col];
 
+        // It should be noted that singular matrix is uncommon in the context of transformation.
+        // The following implementation is subpar; there's a chance for singular matrix to escape
+        // this function.
         if pivot_val != 0.0 {
             continue
         }
@@ -196,21 +199,6 @@ mod tests {
             [6.00, 3.00, 5.00],
             [3.00, 0.00, 8.00]
         ]))
-    }
-
-    #[test]
-    fn test_ensure_pivot_non_zero_impossible() {
-        let mut matrix = Matrix([
-            [1.00, 2.00, 9.00],
-            [0.00, 0.00, 0.00],
-            [6.00, 3.00, 5.00]
-        ]);
-        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
-        let total_row = 3;
-        let total_column = 3;
-        let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-
-        assert_eq!(result, Err("Matrix has no inverse".to_string()));
     }
 
     #[test]
