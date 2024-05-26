@@ -20,6 +20,21 @@ impl<const N: usize> Matrix<N> {
     }
 
     pub const SIZE: usize = N;
+
+    pub fn invert(&self, is_homogenous: bool) -> Result<Matrix<N>, String> {
+        let total_row: usize = N;
+        let total_column: usize = if is_homogenous { N-1 } else { N };
+
+        let mut matrix = self.clone();
+        let mut inv_matrix = Matrix::<N>::identity_matrix();
+
+        ensure_pivot_non_zero(&mut matrix, &mut inv_matrix, total_row, total_column)?;
+        forward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
+        scale_pivot_to_one(&mut matrix, &mut inv_matrix, total_row, total_column);
+        backward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
+
+        Ok(inv_matrix)
+    }
 }
 
 impl<const N: usize> Index<usize> for Matrix<N> {
@@ -34,21 +49,6 @@ impl<const N: usize> IndexMut<usize> for Matrix<N> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.0[index]
     }
-}
-
-pub fn invert_matrix<const N: usize>(matrix: &Matrix<N>, is_homogenous: bool) -> Result<Matrix<N>, String> {
-    let total_row: usize = N;
-    let total_column: usize = if is_homogenous { N-1 } else { N };
-
-    let mut matrix = matrix.clone();
-    let mut inv_matrix = Matrix::<N>::identity_matrix();
-
-    ensure_pivot_non_zero(&mut matrix, &mut inv_matrix, total_row, total_column)?;
-    forward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
-    scale_pivot_to_one(&mut matrix, &mut inv_matrix, total_row, total_column);
-    backward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
-
-    Ok(inv_matrix)
 }
 
 fn ensure_pivot_non_zero<const N: usize>(
