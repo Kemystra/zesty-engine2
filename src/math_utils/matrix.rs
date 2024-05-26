@@ -62,7 +62,7 @@ fn ensure_pivot_non_zero<const N: usize>(
         let mut pivot_val = matrix[col][col];
 
         if pivot_val != 0.0 {
-            return Ok(())
+            continue
         }
 
         for row in 0..total_row {
