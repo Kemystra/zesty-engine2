@@ -198,7 +198,12 @@ mod tests {
             [1.00, 2.00, 9.00],
             [6.00, 3.00, 5.00],
             [3.00, 0.00, 8.00]
-        ]))
+        ]));
+        assert_eq!(dummy_inv_matrix, Matrix([
+            [1.00, 0.00, 0.00],
+            [0.00, 0.00, 1.00],
+            [0.00, 1.00, 0.00]
+        ]));
     }
 
     #[test]
@@ -235,22 +240,36 @@ mod tests {
             [1.00, 2.00/4.00, 9.00/4.00],
             [0.00, 1.00, 7.00/8.00],
             [0.00, 0.00, 1.00]
-        ]))
+        ]));
+        assert_eq!(dummy_inv_matrix, Matrix([
+            [1.00/4.00, 0.00, 0.00],
+            [0.00, 1.00/8.00, 0.00],
+            [0.00, 0.00, 1.00/5.00],
+        ]));
     }
 
     #[test]
     fn test_backward_substitution() {
         let mut matrix = Matrix([
-            [1.00, 2.00, 9.00],
-            [0.00, 1.00, 7.00],
-            [0.00, 0.00, 1.00]
+            [1.0, 1.0, -1.0],
+            [0.0, 1.0, 0.5],
+            [0.0, 0.0, 1.0]
         ]);
-        let mut dummy_inv_matrix = Matrix::<3>::identity_matrix();
+        let mut dummy_inv_matrix = Matrix([
+            [1.0, 0.0, 0.0],
+            [1.5, 1.0, 0.0],
+            [1.0, 0.0, 1.0]
+        ]);
         let total_row = 3;
         let total_column = 3;
 
         backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        assert_eq!(matrix, Matrix::<3>::identity_matrix())
+        assert_eq!(matrix, Matrix::<3>::identity_matrix());
+        assert_eq!(dummy_inv_matrix, Matrix([
+            [0.2, 0.2, 0.0],
+            [-0.3, 0.1, 1.0],
+            [0.1, -0.1, 0.0]
+        ]));
     }
 
     #[test]
