@@ -2,7 +2,6 @@ use std::ops::Index;
 use std::ops::IndexMut;
 
 
-#[cfg_attr(test, derive(PartialEq))]
 #[derive(Clone, Debug)]
 pub(crate) struct Matrix<const N: usize>([[f32; N]; N]);
 
@@ -48,6 +47,20 @@ impl<const N: usize> Index<usize> for Matrix<N> {
 impl<const N: usize> IndexMut<usize> for Matrix<N> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.0[index]
+    }
+}
+
+#[cfg(test)]
+impl<const N: usize> PartialEq for Matrix<N> {
+    fn eq(&self, other: &Self) -> bool {
+        for x in 0..N {
+            for y in 0..N {
+                let cmp = (self[x][y] - other[x][y]).abs() < std::f32::EPSILON;
+                if !cmp { return false }
+            }
+        }
+
+        true
     }
 }
 
