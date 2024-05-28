@@ -220,10 +220,16 @@ mod tests {
         let total_column = 3;
 
         forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        // Will add proper assert statement later
-        // For now, will manually check algorithm result
-        println!("{:?}", matrix);
-        assert_eq!(true, true);
+        assert_eq!(matrix, Matrix([
+            [1.00, 2.00, 9.00],
+            [0.00, 8.00, 0.00],
+            [0.00, 0.00, -49.00]
+        ]));
+        assert_eq!(dummy_inv_matrix, Matrix([
+            [1.00, 0.00, 0.00],
+            [0.00, 1.00, 0.00],
+            [-6.00, 1.125, 1.00]
+        ]))
     }
 
     #[test]
