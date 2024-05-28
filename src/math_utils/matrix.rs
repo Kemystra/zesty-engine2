@@ -99,7 +99,9 @@ fn forward_substitution<const N: usize>(
         for row in (col+1)..total_row {
             let multiplier = -(matrix[row][col] / matrix[col][col]);
             // Multiply pivot point's row by multiplier, and add to current row
-            add_multiply_row(matrix, row, col, multiplier)
+            add_multiply_row(matrix, row, col, multiplier);
+            add_multiply_row(inv_matrix, row, col, multiplier);
+            matrix[row][col] = 0.0;
         }
     }
 }
