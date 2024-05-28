@@ -92,13 +92,8 @@ fn ensure_pivot_non_zero<const N: usize>(
             return Err("Matrix has no inverse".to_string())
         }
 
-        let mut tmp = matrix[pivot];
-        matrix[pivot] = matrix[col];
-        matrix[col] = tmp;
-
-        tmp = inv_matrix[pivot];
-        inv_matrix[pivot] = inv_matrix[col];
-        inv_matrix[col] = tmp;
+        swap_row(matrix, pivot, col);
+        swap_row(inv_matrix, pivot, col);
     }
     Ok(())
 }
@@ -125,11 +120,10 @@ fn scale_pivot_to_one<const N: usize>(
 ) -> () {
     // Divide each row to turn the pivot into 1
     for col in 0..total_column {
-        let divisor = matrix[col][col];
-        for i in 0..total_column {
-            matrix[col][i] /= divisor;
-            inv_matrix[col][i] /= divisor;
-        }
+        // Fancy name for 'divisor'
+        let inverse_multiplier = 1.0/matrix[col][col];
+        scale_row(matrix, col, inverse_multiplier);
+        scale_row(inv_matrix, col, inverse_multiplier);
         matrix[col][col] = 1.0;
     }
 }
@@ -141,11 +135,9 @@ fn backward_substitution<const N: usize>(
     // Backward substitution
     for row in 0..total_row {
         for col in (row+1)..total_column {
-            let constant = matrix[row][col];
-            for i in 0..total_column {
-                matrix[row][i] -= matrix[col][i] * constant;
-                inv_matrix[row][i] -= inv_matrix[col][i] * constant;
-            }
+            let multiplier = -matrix[row][col];
+            add_multiply_row(matrix, row, col, multiplier);
+            add_multiply_row(inv_matrix, row, col, multiplier);
 
             matrix[row][col] = 0.0;
         }
