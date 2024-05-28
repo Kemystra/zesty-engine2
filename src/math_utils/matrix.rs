@@ -251,8 +251,8 @@ mod tests {
     #[test]
     fn test_backward_substitution() {
         let mut matrix = Matrix([
-            [1.0, 1.0, -1.0],
-            [0.0, 1.0, 0.5],
+            [1.0, 0.5, -0.5],
+            [0.0, 1.0, 1.0],
             [0.0, 0.0, 1.0]
         ]);
         let mut dummy_inv_matrix = Matrix([
@@ -266,9 +266,9 @@ mod tests {
         backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
         assert_eq!(matrix, Matrix::<3>::identity_matrix());
         assert_eq!(dummy_inv_matrix, Matrix([
-            [0.2, 0.2, 0.0],
-            [-0.3, 0.1, 1.0],
-            [0.1, -0.1, 0.0]
+            [1.25, -0.5, 1.0],
+            [0.5, 1.0, -1.0],
+            [1.0, 0.0, 1.0]
         ]));
     }
 
