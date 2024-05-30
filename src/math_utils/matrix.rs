@@ -1,9 +1,10 @@
 use std::ops::Index;
 use std::ops::IndexMut;
+use super::Float;
 
 
 #[derive(Clone, Debug)]
-pub(crate) struct Matrix<const N: usize>([[f32; N]; N]);
+pub(crate) struct Matrix<const N: usize>([[Float; N]; N]);
 
 pub(crate) type Matrix3 = Matrix<3>;
 pub(crate) type Matrix4 = Matrix<4>;
@@ -37,7 +38,7 @@ impl<const N: usize> Matrix<N> {
 }
 
 impl<const N: usize> Index<usize> for Matrix<N> {
-    type Output = [f32; N];
+    type Output = [Float; N];
 
     fn index(&self, index: usize) -> &Self::Output {
         &self.0[index]
@@ -55,7 +56,7 @@ impl<const N: usize> PartialEq for Matrix<N> {
     fn eq(&self, other: &Self) -> bool {
         for x in 0..N {
             for y in 0..N {
-                let cmp = (self[x][y] - other[x][y]).abs() < std::f32::EPSILON;
+                let cmp = (self[x][y] - other[x][y]).abs() < Float::EPSILON;
                 if !cmp { return false }
             }
         }
@@ -161,7 +162,7 @@ fn add_multiply_row<const N: usize>(
     matrix: &mut Matrix<N>,
     target_row_index: usize,
     add_row_index: usize,
-    multiplier: f32,
+    multiplier: Float,
 ) -> () {
     let columns = Matrix::<N>::SIZE;
 
@@ -174,7 +175,7 @@ fn add_multiply_row<const N: usize>(
 fn scale_row<const N: usize>(
     matrix: &mut Matrix<N>,
     target_row_index: usize,
-    multiplier: f32
+    multiplier: Float
 ) -> () {
     let columns = Matrix::<N>::SIZE;
 

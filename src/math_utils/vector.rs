@@ -1,4 +1,10 @@
-use num_traits::Num;
+use super::Float;
 
 
-pub struct Vector<const N: usize>([f32])
+pub struct Vector<const N: usize>([Float; N]);
+
+impl<const N: usize> Vector<N> {
+    pub fn x(&self) -> Float {
+        
+    }
+}
