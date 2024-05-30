@@ -1,34 +1,35 @@
-use super::Float;
+use num_traits::Num;
 
 
-pub struct Vector<const N: usize>([Float; N]);
+pub struct Vector<const N: usize, T>([T; N]);
 
-pub type Vector3 = Vector<3>;
-pub type Vector4 = Vector<4>;
-pub type Vector2 = Vector<2>;
+pub type Vector3<T> = Vector<3,T>;
+pub type Vector4<T> = Vector<4,T>;
+pub type Vector2<T> = Vector<2,T>;
 
-impl<const N: usize> Vector<N> {
-    pub fn x(&self) -> Float {
+impl<const N: usize, T> Vector<N,T>
+where T: Num + Copy {
+    pub fn x(&self) -> T {
         self.0[0]
     }
 
-    pub fn y(&self) -> Float {
+    pub fn y(&self) -> T {
         self.0[1]
     }
 
-    pub fn z(&self) -> Float {
+    pub fn z(&self) -> T {
         self.0[2]
     }
 
-    pub fn set_x(&mut self, value: Float) -> () {
+    pub fn set_x(&mut self, value: T) -> () {
         self.0[0] = value;
     }
 
-    pub fn set_y(&mut self, value: Float) -> () {
+    pub fn set_y(&mut self, value: T) -> () {
         self.0[1] = value;
     }
 
-    pub fn set_z(&mut self, value: Float) -> () {
+    pub fn set_z(&mut self, value: T) -> () {
         self.0[2] = value;
     }
 }
