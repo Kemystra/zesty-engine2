@@ -1,6 +1,7 @@
 use num_traits::Num;
 
 
+#[derive(Clone, Copy)]
 pub struct Vector<const N: usize, T>([T; N]);
 
 pub type Vector3<T> = Vector<3,T>;
