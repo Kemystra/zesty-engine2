@@ -32,4 +32,8 @@ where T: Num + Copy {
     pub fn set_z(&mut self, value: T) -> () {
         self.0[2] = value;
     }
+
+    pub fn array(&self) -> &[T; N] {
+        &self.0
+    }
 }
