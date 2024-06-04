@@ -10,6 +10,10 @@ pub(crate) type Matrix3 = Matrix<3>;
 pub(crate) type Matrix4 = Matrix<4>;
 
 impl<const N: usize> Matrix<N> {
+    pub fn new(arr: [[Float; N]; N]) -> Self {
+        Self(arr)
+    }
+
     pub fn identity_matrix() -> Self {
         let mut matrix = [[0.0; N]; N];
         for i in 0..N {
