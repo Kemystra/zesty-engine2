@@ -12,6 +12,10 @@ pub type Vector2<T> = Vector<2,T>;
 
 impl<const N: usize, T> Vector<N,T>
 where T: Num + Copy {
+    pub fn new(arr: [T; N]) -> Self {
+        Self(arr)
+    }
+
     pub const SIZE: usize = N;
 
     pub fn x(&self) -> T {
