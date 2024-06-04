@@ -2,8 +2,29 @@ pub mod vector;
 pub mod matrix;
 pub mod quaternion;
 
+use matrix::Matrix4;
+use vector::Vector3;
+
 
 pub type Float = f32;
+
+pub fn transform_3d_vector(matrix: &Matrix4, vector: Vector3<Float>) -> Vector3<Float> {
+    let mut result_array = [0.0, 0.0, 0.0];
+
+    for i in 0..Vector3::<Float>::SIZE {
+        let mut sum_multiply = 0.0;
+        for j in 0..Vector3::<Float>::SIZE {
+            sum_multiply += vector[j] * matrix[j][i];
+        }
+
+        // Add translation part
+        result_array[i] = sum_multiply + matrix[3][i];
+    }
+
+    Vector3::new(result_array)
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
