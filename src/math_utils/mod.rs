@@ -8,7 +8,9 @@ use vector::Vector3;
 
 pub type Float = f32;
 
-pub fn transform_3d_vector(matrix: &Matrix4, vector: Vector3<Float>) -> Vector3<Float> {
+// Applies 3D transformations represented as Matrix4 to a point represented as Vector3.
+// This includes rotations, scaling, and translations
+pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<Float>) -> Vector3<Float> {
     let mut result_array = [0.0, 0.0, 0.0];
 
     for i in 0..Vector3::<Float>::SIZE {
@@ -40,7 +42,7 @@ mod tests {
 
         let vector = Vector3::new([1.0, 2.0, 3.0]);
 
-        let result = transform_3d_vector(&matrix, vector);
+        let result = transform_3d_point(&matrix, vector);
 
         let expected = Vector3::new([3.0, 5.0, 7.0]);
         assert_eq!(result.array(), expected.array());
