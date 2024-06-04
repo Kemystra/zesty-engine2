@@ -37,6 +37,10 @@ where T: Num + Copy {
     pub fn array(&self) -> &[T; N] {
         &self.0
     }
+
+    pub fn from_array(arr: [T; N]) -> Self {
+        Self(arr)
+    }
 }
 
 macro_rules! vector {
