@@ -38,3 +38,15 @@ where T: Num + Copy {
         &self.0
     }
 }
+
+macro_rules! vector {
+    ($val:expr) => {
+        Vector([$val])
+    };
+
+    ($($vals:expr),+) => {
+        Vector([$($vals),+])
+    }
+}
+
+pub(crate) use vector;
