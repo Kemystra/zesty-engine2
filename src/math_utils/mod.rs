@@ -6,16 +6,16 @@ use matrix::Matrix4;
 use vector::Vector3;
 
 
-pub type Float = f32;
+pub type FloatType = f32;
 
 // Applies 3D transformations represented as Matrix4 to a point represented as Vector3.
 // This includes rotations, scaling, and translations
-pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<Float>) -> Vector3<Float> {
+pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<FloatType>) -> Vector3<FloatType> {
     let mut result_array = [0.0, 0.0, 0.0];
 
-    for i in 0..Vector3::<Float>::SIZE {
+    for i in 0..Vector3::<FloatType>::SIZE {
         let mut sum_multiply = 0.0;
-        for j in 0..Vector3::<Float>::SIZE {
+        for j in 0..Vector3::<FloatType>::SIZE {
             sum_multiply += vector[j] * matrix[j][i];
         }
 
