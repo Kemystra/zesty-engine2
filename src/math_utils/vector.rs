@@ -1,3 +1,5 @@
+use std::ops::{Index, IndexMut};
+
 use num_traits::Num;
 
 
@@ -42,6 +44,20 @@ where T: Num + Copy {
 
     pub fn from_array(arr: [T; N]) -> Self {
         Self(arr)
+    }
+}
+
+impl<const N: usize, T> Index<usize> for Vector<N,T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
+impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.0[index]
     }
 }
 
