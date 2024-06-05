@@ -1,4 +1,4 @@
-use crate::math_utils::vector::Vector4;
+use crate::math_utils::FloatType;
 
 
-pub struct Quaternion(Vector4<f32>);
+pub struct Quaternion([FloatType; 4]);
