@@ -1,3 +1,5 @@
+use std::ops::{Index, IndexMut};
+
 use crate::math_utils::FloatType;
 
 #[derive(Debug)]
@@ -9,6 +11,20 @@ impl PartialEq for Quaternion {
         self.0.iter()
             .zip(other.0.iter())
             .all(|(a,b)| (a-b).abs() < FloatType::EPSILON)
+    }
+}
+
+impl Index<usize> for Quaternion {
+    type Output = FloatType;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
+impl IndexMut<usize> for Quaternion {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.0[index]
     }
 }
 
