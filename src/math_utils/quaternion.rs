@@ -1,8 +1,6 @@
-use std::cmp::PartialEq;
-
 use crate::math_utils::FloatType;
 
-
+#[derive(Debug)]
 pub struct Quaternion([FloatType; 4]);
 
 #[cfg(test)]
