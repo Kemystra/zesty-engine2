@@ -14,6 +14,31 @@ impl PartialEq for Quaternion {
     }
 }
 
+impl Quaternion {
+    pub fn from_euler_angles<T: Into<FloatType>>(x: T, y: T, z: T) -> Self
+    {
+        // Got this abomination from Wikipedia lul
+        // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+        let a = x.into() * 0.5;
+        let ca = a.cos();
+        let sa = a.sin();
+
+        let b = y.into() * 0.5;
+        let cb = b.cos();
+        let sb = b.sin();
+
+        let c = z.into() * 0.5;
+        let cc = c.cos();
+        let sc = c.sin();
+
+        Quaternion([
+            cc*cb*ca + sc*sb*sa,
+            cc*cb*sa - sc*sb*ca,
+            cc*sb*ca + sc*cb*sa,
+            sc*cb*ca - cc*sb*sa
+        ])
+    }
+}
 
 #[cfg(test)]
 mod tests {
