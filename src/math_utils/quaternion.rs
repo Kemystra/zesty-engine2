@@ -60,6 +60,24 @@ impl Quaternion {
             sc*cb*ca - cc*sb*sa
         ])
     }
+
+    fn scale(&mut self, num: FloatType) -> () {
+        self.0.iter_mut().for_each(|x| *x *= num);
+    }
+
+    pub fn normalize(&mut self) -> () {
+        let sq_magnitude = self.sq_magnitude();
+        // The epsilon value is calculated by:
+        // https://johannesugb.github.io/cpu-programming/tools/floating-point-epsilon-calculator/
+        if (1.0 - sq_magnitude).abs() < 1.19209e-07 {
+            // Based on Padé approximation. See:
+            // https://stackoverflow.com/questions/11667783/quaternion-and-normalization
+            self.scale(2.0 / (1.0 + sq_magnitude));
+        }
+        else {
+            self.scale(1.0 / sq_magnitude.sqrt());
+        }
+    }
 }
 
 #[cfg(test)]
