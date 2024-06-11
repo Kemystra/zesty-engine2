@@ -89,4 +89,19 @@ mod tests {
         let q = Quaternion::from_euler_angles(1.0, 1.0, 1.0);
         assert_eq!(q, Quaternion([0.78607, 0.16752, 0.57094, 0.16752]));
     }
+
+    fn test_normalize_quaternion_1_component() {
+        let mut q = Quaternion([69.0, 0.0, 0.0, 0.0]);
+        q.normalize();
+
+        assert_eq!(q, Quaternion([1.0, 0.0, 0.0, 0.0]));
+    }
+
+    #[test]
+    fn test_normalize_quaternion_all_component() {
+        let mut q = Quaternion([89.0, 89.0, 89.0, 89.0]);
+        q.normalize();
+
+        assert_eq!(q, Quaternion([0.5, 0.5, 0.5, 0.5]));
+    }
 }
