@@ -34,7 +34,7 @@ impl IndexMut<usize> for Quaternion {
 
 impl Quaternion {
     pub fn sq_magnitude(&self) -> FloatType {
-        self.0.into_iter().reduce(|acc, e| acc + e*e).unwrap()
+        self.0.into_iter().map(|e| e*e).reduce(|acc, e| acc+e).unwrap()
     }
 
     pub fn from_euler_angles<T: Into<FloatType>>(x: T, y: T, z: T) -> Self
