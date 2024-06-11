@@ -90,6 +90,7 @@ mod tests {
         assert_eq!(q, Quaternion([0.78607, 0.16752, 0.57094, 0.16752]));
     }
 
+    #[test]
     fn test_normalize_quaternion_1_component() {
         let mut q = Quaternion([69.0, 0.0, 0.0, 0.0]);
         q.normalize();
