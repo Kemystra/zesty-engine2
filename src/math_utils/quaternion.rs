@@ -2,6 +2,10 @@ use std::ops::{Index, IndexMut};
 
 use crate::math_utils::FloatType;
 
+// This implementation of Quaternion does not care about the magnitude of itself. That is, it might
+// not be a unit quaternion.
+//
+// Parameter arrangement in this implementation is Quaternion([w, x, y, z])
 #[derive(Debug)]
 pub struct Quaternion([FloatType; 4]);
 
