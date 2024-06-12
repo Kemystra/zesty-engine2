@@ -1,5 +1,7 @@
 use std::ops::{Index, IndexMut};
 
+use super::matrix::Matrix4;
+use super::vector::*;
 use crate::math_utils::FloatType;
 
 // This implementation of Quaternion does not care about the magnitude of itself. That is, it might
@@ -84,7 +86,6 @@ impl Quaternion {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use super::super::matrix::Matrix4;
 
     #[test]
     fn quaternion_from_euler_angle_x_only() {
