@@ -69,6 +69,7 @@ impl Quaternion {
         let sq_magnitude = self.sq_magnitude();
         // The epsilon value is calculated by:
         // https://johannesugb.github.io/cpu-programming/tools/floating-point-epsilon-calculator/
+        // Might not be the perfect value
         if (1.0 - sq_magnitude).abs() < 1.19209e-07 {
             // Based on Padé approximation. See:
             // https://stackoverflow.com/questions/11667783/quaternion-and-normalization
