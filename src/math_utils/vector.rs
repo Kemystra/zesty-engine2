@@ -61,14 +61,14 @@ impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
     }
 }
 
-macro_rules! vector {
+macro_rules! vector [
     ($val:expr) => {
-        Vector([$val])
+        Vector::new([$val])
     };
 
     ($($vals:expr),+) => {
-        Vector([$($vals),+])
+        Vector::new([$($vals),+])
     }
-}
+];
 
 pub(crate) use vector;
