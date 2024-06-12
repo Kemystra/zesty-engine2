@@ -83,6 +83,7 @@ impl Quaternion {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::super::matrix::Matrix4;
 
     #[test]
     fn quaternion_from_euler_angle_x_only() {
@@ -128,5 +129,22 @@ mod tests {
         q.normalize();
 
         assert_eq!(q, Quaternion([0.5, 0.5, 0.5, 0.5]));
+    }
+
+    #[test]
+    fn test_update_matrix4_rotation() {
+        // Value based on Euler angle (45, 45, 90). See
+        // https://www.andre-gaschler.com/rotationconverter/
+        let q = Quaternion([ 0.3348807, 0.3348807, 0.6697614, 0.5719523]);
+        let mut mat = Matrix4::identity_matrix();
+
+        q.update_matrix(&mut mat, 1.0);
+
+        assert_eq!(mat, Matrix4::new([
+            [-0.1214509, -0.5418530, 0.8316519, 0.0],
+            [0.9904334, -0.1214509, 0.0655087, 0.0],
+            [0.0655087, 0.8316519, 0.5514197, 0.0],
+            [0.0, 0.0, 0.0, 1.0]
+        ]))
     }
 }
