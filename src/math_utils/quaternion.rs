@@ -140,7 +140,7 @@ mod tests {
         let q = Quaternion([ 0.3348807, 0.3348807, 0.6697614, 0.5719523]);
         let mut mat = Matrix4::identity_matrix();
 
-        q.update_matrix(&mut mat, 1.0);
+        q.update_matrix(&mut mat, vector![1.0, 1.0, 1.0]);
 
         assert_eq!(mat, Matrix4::new([
             [-0.1214509, -0.5418530, 0.8316519, 0.0],
