@@ -17,6 +17,22 @@ pub struct Transform {
 }
 
 impl Transform {
+    pub fn new(position: Vector3<f32>, rotation: Quaternion, scale: Vector3<f32>) -> Self {
+        let new_self = Self {
+            matrix: Matrix4::identity_matrix(),
+            inverse_matrix: Matrix4::identity_matrix(),
+
+            rotation,
+            scale,
+            position,
+
+            dirty_flag: true,
+        };
+
+        new_self.update_matrix();
+        new_self
+    }
+
     pub fn local_to_world(&self, pos: Vector3<f32>) -> Vector3<f32> {
     }
 
