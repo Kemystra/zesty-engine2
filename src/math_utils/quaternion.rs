@@ -115,25 +115,25 @@ mod tests {
     #[test]
     fn quaternion_from_euler_angle_x_only() {
         let q = Quaternion::from_euler_angles(1.0, 0.0, 0.0);
-        assert_eq!(q, Quaternion([0.87758, 0.47943, 0.0, 0.0]));
+        assert_eq!(q, Quaternion([0.87758255, 0.47942555, 0.0, 0.0]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_y_only() {
         let q = Quaternion::from_euler_angles(0.0, 1.0, 0.0);
-        assert_eq!(q, Quaternion([0.87758, 0.0, 0.47943, 0.0]));
+        assert_eq!(q, Quaternion([0.87758255, 0.0, 0.47942555, 0.0]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_z_only() {
         let q = Quaternion::from_euler_angles(0.0, 0.0, 1.0);
-        assert_eq!(q, Quaternion([0.87758, 0.0, 0.0, 0.47943]));
+        assert_eq!(q, Quaternion([0.87758255, 0.0, 0.0, 0.47942555]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_all() {
         let q = Quaternion::from_euler_angles(1.0, 1.0, 1.0);
-        assert_eq!(q, Quaternion([0.78607, 0.16752, 0.57094, 0.16752]));
+        assert_eq!(q, Quaternion([0.7860666, 0.16751876, 0.5709415, 0.1675188]));
     }
 
     #[test]
