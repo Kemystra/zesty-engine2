@@ -30,11 +30,11 @@ impl Transform {
             dirty_flag: true,
         };
 
-        new_self.update_matrix();
+        new_self.update();
         new_self
     }
 
-    pub fn update_matrix(&mut self) {
+    pub fn update(&mut self) {
         // Update position
         for i in 0..3 {
             self.matrix[3][i] = self.position[i];
