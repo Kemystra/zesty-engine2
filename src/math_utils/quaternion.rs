@@ -162,7 +162,7 @@ mod tests {
     fn test_update_matrix4_rotation() {
         // Value based on Euler angle (45, 45, 90). See
         // https://www.andre-gaschler.com/rotationconverter/
-        let q = Quaternion([ 0.3348807, 0.3348807, 0.6697614, 0.5719523]);
+        let q = Quaternion([0.5719523, 0.3348807, 0.3348807, 0.6697614]);
         let mut mat = Matrix4::identity_matrix();
 
         q.update_matrix(&mut mat, vector![1.0, 1.0, 1.0]);
