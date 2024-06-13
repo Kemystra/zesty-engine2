@@ -82,7 +82,7 @@ impl Quaternion {
         }
     }
 
-    pub fn update_matrix(&self, matrix: &mut Matrix4, original_scale: Vector3<FloatType>) -> () {
+    pub fn edit_matrix(&self, matrix: &mut Matrix4, original_scale: Vector3<FloatType>) -> () {
         let wx = self[0] * self[1] * 2.0;
         let wy = self[0] * self[2] * 2.0;
         let wz = self[0] * self[3] * 2.0;
@@ -159,13 +159,13 @@ mod tests {
     }
 
     #[test]
-    fn test_update_matrix4_rotation() {
+    fn test_edit_matrix4_rotation() {
         // Value based on Euler angle (45, 45, 90). See
         // https://www.andre-gaschler.com/rotationconverter/
         let q = Quaternion([0.5719523, 0.3348807, 0.3348807, 0.6697614]);
         let mut mat = Matrix4::identity_matrix();
 
-        q.update_matrix(&mut mat, vector![1.0, 1.0, 1.0]);
+        q.edit_matrix(&mut mat, vector![1.0, 1.0, 1.0]);
 
         assert_eq!(mat, Matrix4::new([
             [-0.1214509, -0.5418530, 0.8316519, 0.0],
