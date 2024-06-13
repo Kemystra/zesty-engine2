@@ -18,7 +18,7 @@ pub struct Transform {
 
 impl Transform {
     pub fn new(position: Vector3<f32>, rotation: Quaternion, scale: Vector3<f32>) -> Self {
-        let new_self = Self {
+        let mut new_self = Self {
             matrix: Matrix4::identity_matrix(),
             inverse_matrix: Matrix4::identity_matrix(),
 
