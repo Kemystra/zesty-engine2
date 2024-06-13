@@ -1,4 +1,5 @@
 use crate::math_utils;
+use math_utils::FloatType;
 use math_utils::matrix::Matrix4;
 use math_utils::quaternion::Quaternion;
 use math_utils::vector::Vector3;
@@ -10,14 +11,14 @@ pub struct Transform {
     inverse_matrix: Matrix4,
 
     rotation: Quaternion,
-    scale: Vector3<f32>,
-    position: Vector3<f32>,
+    scale: Vector3<FloatType>,
+    position: Vector3<FloatType>,
 
     dirty_flag: bool
 }
 
 impl Transform {
-    pub fn new(position: Vector3<f32>, rotation: Quaternion, scale: Vector3<f32>) -> Self {
+    pub fn new(position: Vector3<FloatType>, rotation: Quaternion, scale: Vector3<FloatType>) -> Self {
         let mut new_self = Self {
             matrix: Matrix4::identity_matrix(),
             inverse_matrix: Matrix4::identity_matrix(),
@@ -46,9 +47,9 @@ impl Transform {
         self.dirty_flag = false;
     }
 
-    pub fn local_to_world(&self, pos: Vector3<f32>) -> Vector3<f32> {
+    pub fn local_to_world(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
     }
 
-    pub fn world_to_local(&self, pos: Vector3<f32>) -> Vector3<f32> {
+    pub fn world_to_local(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
     }
 }
