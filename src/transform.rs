@@ -15,3 +15,11 @@ pub struct Transform {
 
     dirty_flag: bool
 }
+
+impl Transform {
+    pub fn local_to_world(&self, pos: Vector3<f32>) -> Vector3<f32> {
+    }
+
+    pub fn world_to_local(&self, pos: Vector3<f32>) -> Vector3<f32> {
+    }
+}
