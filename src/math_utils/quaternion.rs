@@ -81,6 +81,31 @@ impl Quaternion {
             self.scale(1.0 / sq_magnitude.sqrt());
         }
     }
+
+    pub fn update_matrix(&self, matrix: &mut Matrix4, original_scale: Vector3<FloatType>) -> () {
+        let wx = self[0] * self[1] * 2.0;
+        let wy = self[0] * self[2] * 2.0;
+        let wz = self[0] * self[3] * 2.0;
+
+        let xx = self[1] * self[1] * 2.0;
+        let xy = self[1] * self[2] * 2.0;
+        let xz = self[1] * self[3] * 2.0;
+
+        let yy = self[2] * self[2] * 2.0;
+        let yz = self[2] * self[3] * 2.0;
+
+        let zz = self[3] * self[3] * 2.0;
+
+        matrix[0][0] = (1.0 - yy - zz) * original_scale.x();
+        matrix[0][1] = xy - wz;
+        matrix[0][2] = xz + wy;
+        matrix[1][0] = xy + wz;
+        matrix[1][1] = (1.0 - xx - zz) * original_scale.y();
+        matrix[1][2] = yz - wx;
+        matrix[2][0] = xz - wy;
+        matrix[2][1] = yz + wx;
+        matrix[2][2] = (1.0 - xx - yy) * original_scale.z();
+    }
 }
 
 #[cfg(test)]
