@@ -4,6 +4,7 @@ use math_utils::quaternion::Quaternion;
 use math_utils::vector::Vector3;
 
 
+// Any operation that impacts the field `matrix` must set the dirty flag
 pub struct Transform {
     matrix: Matrix4,
     inverse_matrix: Matrix4,
