@@ -33,6 +33,19 @@ impl Transform {
         new_self
     }
 
+    pub fn update_matrix(&mut self) {
+        // Update position
+        for i in 0..3 {
+            self.matrix[3][i] = self.position[i];
+        }
+
+        // Update rotation and scale
+        self.rotation.edit_matrix(&mut self.matrix, self.scale);
+
+        // Set dirty flag to false, regardless of initial value
+        self.dirty_flag = false;
+    }
+
     pub fn local_to_world(&self, pos: Vector3<f32>) -> Vector3<f32> {
     }
 
