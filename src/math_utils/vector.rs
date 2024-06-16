@@ -1,8 +1,6 @@
 use std::ops::{Index, IndexMut};
 use num_traits::{Num, Float};
 
-use super::FloatType;
-
 
 #[derive(Clone, Copy)]
 pub struct Vector<const N: usize, T>([T; N]);
@@ -62,7 +60,6 @@ impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
     }
 }
 
-#[cfg(test)]
 impl<const N: usize, T> PartialEq for Vector<N,T>
 where T: Float {
     fn eq(&self, other: &Self) -> bool {
