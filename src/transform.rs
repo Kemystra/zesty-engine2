@@ -43,6 +43,10 @@ impl Transform {
         // Update rotation and scale
         self.rotation.edit_matrix(&mut self.matrix, self.scale);
 
+        // Generate inverse matrix from original matrix
+        // Should NEVER fail
+        self.inverse_matrix = self.matrix.invert(true).unwrap();
+
         // Set dirty flag to false, regardless of initial value
         self.dirty_flag = false;
     }
