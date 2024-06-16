@@ -41,7 +41,7 @@ impl Transform {
         }
 
         // Update rotation and scale
-        self.rotation.edit_matrix(&mut self.matrix, self.scale);
+        self.rotation.edit_3d_matrix(&mut self.matrix, self.scale);
 
         // Generate inverse matrix from original matrix
         // Should NEVER fail

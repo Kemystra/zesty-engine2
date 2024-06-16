@@ -82,7 +82,7 @@ impl Quaternion {
         }
     }
 
-    pub fn edit_matrix(&self, matrix: &mut Matrix4, original_scale: Vector3<FloatType>) -> () {
+    pub fn edit_3d_matrix(&self, matrix: &mut Matrix4, original_scale: Vector3<FloatType>) -> () {
         let wx = self[0] * self[1] * 2.0;
         let wy = self[0] * self[2] * 2.0;
         let wz = self[0] * self[3] * 2.0;
