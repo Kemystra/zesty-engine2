@@ -1,8 +1,8 @@
 use crate::math_utils;
-use math_utils::FloatType;
+use math_utils::{FloatType, transform_3d_point};
 use math_utils::matrix::Matrix4;
 use math_utils::quaternion::Quaternion;
-use math_utils::vector::Vector3;
+use math_utils::vector::{Vector3, Vector, vector};
 
 
 // Any operation that impacts the field `matrix` must set the dirty flag
@@ -55,5 +55,47 @@ impl Transform {
     }
 
     pub fn world_to_local(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn init_test_transform() -> Transform {
+        let deg45 = std::f32::consts::FRAC_PI_4;
+        let deg20 = std::f32::consts::PI / 9.0;
+        Transform::new(
+            vector![1.0, 7.0, 2.5],
+            Quaternion::from_euler_angles(deg45, 0.0, deg20),
+            vector![1.0, 1.0, 1.0]
+        )
+    }
+
+    #[test]
+    fn test_get_point_position_in_world() {
+        let transform = init_test_transform();
+        let pos = vector![2.5, 1.89, 10.7];
+
+        let pos_in_world = transform.local_to_world(pos);
+        assert_eq!(pos_in_world, vector![
+            1598514383.0/250000000.0,
+            1451053867.0/100000000.0,
+            2182402727.0/250000000.0
+        ]);
+    }
+
+    #[test]
+    fn test_get_point_position_in_local() {
+        let transform = init_test_transform();
+        let pos = vector![1.0, 2.0, -0.5];
+
+        let pos_in_world = transform.local_to_world(pos);
+        assert_eq!(pos_in_world, vector![
+            30230600000000.0/17677669273469.0,
+            -37531088251003750000.0/31250000378552473723.0,
+            -170113607802021250000.0/31250000378552473723.0
+        ]);
     }
 }
