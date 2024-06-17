@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+use std::{fmt::Debug, ops::{Index, IndexMut}};
 use num_traits::{Num, Float};
 
 
@@ -66,6 +66,13 @@ where T: Float {
         self.0.into_iter()
             .zip(other.0.into_iter())
             .all(|(a,b)| (a-b).abs() < T::epsilon())
+    }
+}
+
+impl<const N: usize, T> Debug for Vector<N,T>
+where T: Debug {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Vector{}{:?}", N, self.0)
     }
 }
 
