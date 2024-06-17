@@ -70,6 +70,10 @@ where T: Float {
 }
 
 macro_rules! vector [
+    ($val:expr; $count:literal) => {
+        Vector::new([$val; $count])
+    };
+
     ($val:expr) => {
         Vector::new([$val])
     };
