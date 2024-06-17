@@ -8,6 +8,9 @@ use vector::Vector3;
 
 pub type FloatType = f32;
 
+// IMPORTANT!
+// Any part of code that deals with angles should be assumed to use radians
+
 // Applies 3D transformations represented as Matrix4 to a point represented as Vector3.
 // This includes rotations, scaling, and translations
 pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<FloatType>) -> Vector3<FloatType> {
