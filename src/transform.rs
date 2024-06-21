@@ -14,7 +14,7 @@ pub struct Transform {
     scale: Vector3<FloatType>,
     position: Vector3<FloatType>,
 
-    dirty_flag: bool
+    is_dirty: bool
 }
 
 impl Transform {
@@ -27,7 +27,7 @@ impl Transform {
             scale,
             position,
 
-            dirty_flag: true,
+            is_dirty: true,
         };
 
         new_self.update();
@@ -35,7 +35,7 @@ impl Transform {
     }
 
     pub fn update(&mut self) {
-        if !self.dirty_flag {
+        if !self.is_dirty {
             return;
         }
 
@@ -52,7 +52,7 @@ impl Transform {
         self.inverse_matrix = self.matrix.invert(true).unwrap();
 
         // Set dirty flag to false, regardless of initial value
-        self.dirty_flag = false;
+        self.is_dirty = false;
     }
 
     pub fn local_to_world(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
