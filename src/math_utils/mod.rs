@@ -10,6 +10,7 @@ pub type FloatType = f32;
 
 // IMPORTANT!
 // Any part of code that deals with angles should be assumed to use radians
+// All matrix are column-major
 
 // Applies 3D transformations represented as Matrix4 to a point represented as Vector3.
 // This includes rotations, scaling, and translations
