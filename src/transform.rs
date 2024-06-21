@@ -35,6 +35,10 @@ impl Transform {
     }
 
     pub fn update(&mut self) {
+        if !self.dirty_flag {
+            return;
+        }
+
         // Update position
         for i in 0..3 {
             self.matrix[3][i] = self.position[i];
