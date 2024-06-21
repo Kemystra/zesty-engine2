@@ -52,9 +52,11 @@ impl Transform {
     }
 
     pub fn local_to_world(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
+        transform_3d_point(&self.matrix, pos)
     }
 
     pub fn world_to_local(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
+        transform_3d_point(&self.inverse_matrix, pos)
     }
 }
 
