@@ -2,7 +2,7 @@ use crate::math_utils;
 use math_utils::{FloatType, transform_3d_point};
 use math_utils::matrix::Matrix4;
 use math_utils::quaternion::Quaternion;
-use math_utils::vector::{Vector3, Vector, vector};
+use math_utils::vector::Vector3;
 
 
 // Any operation that impacts the field `matrix` must set the dirty flag
@@ -68,6 +68,7 @@ impl Transform {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::math_utils::vector::{vector, Vector};
 
     fn init_test_transform() -> Transform {
         let deg45 = std::f32::consts::FRAC_PI_4;
