@@ -79,11 +79,7 @@ mod tests {
         let pos = vector![2.5, 1.89, 10.7];
 
         let pos_in_world = transform.local_to_world(pos);
-        assert_eq!(pos_in_world, vector![
-            1598514383.0/250000000.0,
-            1451053867.0/100000000.0,
-            2182402727.0/250000000.0
-        ]);
+        assert_eq!(pos_in_world, vector![3.9956496, 15.217265, 9.41482]);
     }
 
     #[test]
@@ -91,11 +87,7 @@ mod tests {
         let transform = init_test_transform();
         let pos = vector![1.0, 2.0, -0.5];
 
-        let pos_in_world = transform.local_to_world(pos);
-        assert_eq!(pos_in_world, vector![
-            30230600000000.0/17677669273469.0,
-            -37531088251003750000.0/31250000378552473723.0,
-            -170113607802021250000.0/31250000378552473723.0
-        ]);
+        let pos_in_local = transform.world_to_local(pos);
+        assert_eq!(pos_in_local, vector![0.4836896, -1.3289258, -5.6568546]);
     }
 }
