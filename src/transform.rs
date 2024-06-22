@@ -100,7 +100,7 @@ mod tests {
 
     #[test]
     fn test_rotate_transform() {
-        let transform = init_test_transform();
+        let mut transform = init_test_transform();
         let initial_rotation = transform.rotation;
 
         let deg45 = std::f32::consts::FRAC_PI_4;
