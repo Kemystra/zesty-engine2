@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut, Mul};
+use std::ops::{Index, IndexMut, Mul, MulAssign};
 
 use super::matrix::Matrix4;
 use super::vector::*;
