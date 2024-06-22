@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+use std::ops::{Index, IndexMut, Mul};
 
 use super::matrix::Matrix4;
 use super::vector::*;
@@ -31,6 +31,21 @@ impl Index<usize> for Quaternion {
 impl IndexMut<usize> for Quaternion {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.0[index]
+    }
+}
+
+impl Mul for Quaternion {
+    type Output = Quaternion;
+
+    // Another abomination for quaternion multiplication
+    // Credit to https://paroj.github.io/gltut/Positioning/Tut08%20Quaternions.html
+    fn mul(self, rhs: Self) -> Self::Output {
+        Quaternion([
+            self[0]*rhs[0] - self[1]*rhs[1] - self[2]*rhs[2] - self[3]*rhs[3],
+            self[0]*rhs[1] + self[1]*rhs[0] + self[2]*rhs[3] - self[3]*rhs[2],
+            self[0]*rhs[2] + self[2]*rhs[0] + self[3]*rhs[1] - self[1]*rhs[3],
+            self[0]*rhs[3] + self[3]*rhs[0] + self[1]*rhs[2] - self[2]*rhs[1]
+        ])
     }
 }
 
