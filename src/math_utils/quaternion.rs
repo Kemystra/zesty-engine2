@@ -8,7 +8,7 @@ use crate::math_utils::FloatType;
 // not be a unit quaternion.
 //
 // Parameter arrangement in this implementation is Quaternion([w, x, y, z])
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Quaternion([FloatType; 4]);
 
 #[cfg(test)]
