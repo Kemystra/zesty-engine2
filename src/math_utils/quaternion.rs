@@ -49,6 +49,12 @@ impl Mul for Quaternion {
     }
 }
 
+impl MulAssign for Quaternion {
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = *self * rhs;
+    }
+}
+
 impl Quaternion {
     pub fn sq_magnitude(&self) -> FloatType {
         self.0.into_iter().map(|e| e*e).reduce(|acc, e| acc+e).unwrap()
