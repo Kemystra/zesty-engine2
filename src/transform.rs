@@ -68,7 +68,7 @@ impl Transform {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math_utils::vector::{vector, Vector};
+    use crate::math_utils::{matrix::Matrix, vector::{vector, Vector}};
 
     fn init_test_transform() -> Transform {
         let deg45 = std::f32::consts::FRAC_PI_4;
@@ -96,5 +96,28 @@ mod tests {
 
         let pos_in_local = transform.world_to_local(pos);
         assert_eq!(pos_in_local, vector![0.4836896, -1.3289258, -5.6568546]);
+    }
+
+    #[test]
+    fn test_rotate_transform() {
+        let transform = init_test_transform();
+        let initial_rotation = transform.rotation;
+
+        let deg45 = std::f32::consts::FRAC_PI_4;
+        let rot = Quaternion::from_euler_angles(deg45, 0.0, deg45);
+
+        transform.rotate(rot);
+        // Check if rotation is applied to rotation field first
+        assert_eq!(transform.rotation, initial_rotation * rot);
+        // Check for dirty flag
+        assert!(transform.is_dirty);
+
+        transform.update();
+        println!("{:?}", transform.matrix);
+        /*
+        assert_eq!(transform.matrix, Matrix::new([
+            [0.0, 0.0, 0.0, 1.0]
+        ]))
+        */
     }
 }
