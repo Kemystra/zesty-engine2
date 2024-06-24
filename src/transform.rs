@@ -55,6 +55,14 @@ impl Transform {
         self.is_dirty = false;
     }
 
+    // Interestingly, one of the way to classify rotations is passive vs. active.
+    // Active rotations act directly on the point.
+    // Passive rotations simply affect the frame of reference the object is in.
+    // The reverse of an active rotation is its corresponding passive rotation that yield the same
+    // object orientation.
+    // Extending this to a transformation matrix:
+    // The original matrix (local_to_world) directly move/orient the point.
+    // Its inverse move/orient the frame of reference.
     pub fn local_to_world(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
         transform_3d_point(&self.matrix, pos)
     }
