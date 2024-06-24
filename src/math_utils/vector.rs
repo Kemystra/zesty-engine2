@@ -76,6 +76,7 @@ where T: Debug {
     }
 }
 
+#[macro_export]
 macro_rules! vector [
     ($val:expr; $count:literal) => {
         Vector::new([$val; $count])
@@ -90,4 +91,8 @@ macro_rules! vector [
     }
 ];
 
-pub(crate) use vector;
+pub use vector;
+
+pub mod prelude {
+    pub use super::{Vector, vector, Vector2, Vector3, Vector4};
+}
