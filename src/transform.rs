@@ -70,6 +70,11 @@ impl Transform {
     pub fn world_to_local(&self, pos: Vector3<FloatType>) -> Vector3<FloatType> {
         transform_3d_point(&self.inverse_matrix, pos)
     }
+
+    pub fn rotate(&mut self, q: Quaternion) {
+        self.rotation *= q;
+        self.is_dirty = true;
+    }
 }
 
 
