@@ -1,9 +1,10 @@
+use std::fmt::Debug;
 use std::ops::Index;
 use std::ops::IndexMut;
 use super::FloatType;
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub(crate) struct Matrix<const N: usize>([[FloatType; N]; N]);
 
 pub(crate) type Matrix3 = Matrix<3>;
@@ -66,6 +67,17 @@ impl<const N: usize> PartialEq for Matrix<N> {
         }
 
         true
+    }
+}
+
+impl<const N: usize> Debug for Matrix<N> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut pretty_arr = "".to_owned();
+        for i in 0..N {
+            pretty_arr.push_str(&format!("{:?}\n", self.0[i]));
+        }
+
+        write!(f, "Matrix[\n{}]", &pretty_arr)
     }
 }
 
