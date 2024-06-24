@@ -1,21 +1,8 @@
 use winit::event_loop::{ControlFlow, EventLoop};
 use clap::Parser;
 
-mod app;
-mod scene;
-mod renderer;
-mod math_utils;
-mod transform;
-mod object;
-mod mesh;
+use zesty_engine2::{App, Arguments};
 
-use app::App;
-
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Arguments {
-    scene_filename: String
-}
 
 fn main() {
     let args = Arguments::parse();

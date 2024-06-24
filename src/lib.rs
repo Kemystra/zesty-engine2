@@ -8,11 +8,24 @@ use winit::event_loop::ActiveEventLoop;
 use winit::window::{Window, WindowId};
 
 use softbuffer::{Context, Surface};
+use clap::Parser;
 
-use crate::Arguments;
+pub mod scene;
+pub mod renderer;
+pub mod math_utils;
+pub mod transform;
+pub mod object;
+pub mod mesh;
+
+
 use crate::renderer::Renderer;
 use crate::scene::Scene;
 
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+pub struct Arguments {
+    scene_filename: String
+}
 
 pub struct App {
     window: Option<Rc<Window>>,
