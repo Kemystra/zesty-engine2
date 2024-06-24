@@ -12,7 +12,8 @@ pub type FloatType = f32;
 // Any part of code that deals with angles should be assumed to use radians
 // All matrix are row-major
 // Coordinates are RIGHT-HANDED ffs, opposite to the original raster-3d-engine
-// Any MENTION of Euler angles are assumed to be intrinsic Tait-Bryan angles with sequence XYZ
+// Any MENTION of Euler angles are assumed to be intrinsic Tait-Bryan angles with sequence
+// Z-Y'-X''
 // A rotation is POSITIVE if it moves clockwise when looking in the positive direction of its axis
 
 // Applies 3D transformations represented as Matrix4 to a point represented as Vector3.
