@@ -89,7 +89,7 @@ mod tests {
         Transform::new(
             vector![1.0, 7.0, 2.5],
             Quaternion::from_euler_angles(deg45, 0.0, deg20),
-            vector![1.0, 1.0, 1.0]
+            Vector3::one()
         )
     }
 
