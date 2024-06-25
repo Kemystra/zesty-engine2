@@ -5,10 +5,10 @@ use super::FloatType;
 
 
 #[derive(Clone)]
-pub(crate) struct Matrix<const N: usize>([[FloatType; N]; N]);
+pub struct Matrix<const N: usize>([[FloatType; N]; N]);
 
-pub(crate) type Matrix3 = Matrix<3>;
-pub(crate) type Matrix4 = Matrix<4>;
+pub type Matrix3 = Matrix<3>;
+pub type Matrix4 = Matrix<4>;
 
 impl<const N: usize> Matrix<N> {
     pub fn new(arr: [[FloatType; N]; N]) -> Self {
