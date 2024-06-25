@@ -17,6 +17,11 @@ where T: Num + Copy {
 
     pub const SIZE: usize = N;
 
+    // Construct a vector that has value 1 in all of its field
+    pub fn one() -> Self {
+        Self([T::one(); N])
+    }
+
     pub fn x(&self) -> T {
         self.0[0]
     }
