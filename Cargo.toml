@@ -17,3 +17,6 @@ zesty_engine2_derive = { version = "0.1.0", path = "zesty_engine2_derive" }
 [[bin]]
 name = "zesty_engine2"
 test = false
+
+[lib]
+doctest = false
