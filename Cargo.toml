@@ -13,3 +13,7 @@ obj-rs = "0.7.1"
 softbuffer = "0.4.2"
 winit = "0.30.0"
 zesty_engine2_derive = { version = "0.1.0", path = "zesty_engine2_derive" }
+
+[[bin]]
+name = "zesty_engine2"
+test = false
