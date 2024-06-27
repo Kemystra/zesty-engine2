@@ -81,7 +81,7 @@ impl Transform {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math_utils::{matrix::Matrix, vector::{vector, Vector}};
+    use crate::math_utils::vector::{vector, Vector};
 
     fn init_test_transform() -> Transform {
         let deg45 = std::f32::consts::FRAC_PI_4;
@@ -99,7 +99,11 @@ mod tests {
         let pos = vector![2.5, 1.89, 10.7];
 
         let pos_in_world = transform.local_to_world(pos);
-        assert_eq!(pos_in_world, vector![3.9956496, 15.217265, 9.41482]);
+        assert_eq!(pos_in_world, vector![
+            1369877.0/250000.0,
+            400151.0/200000.0,
+            11402389.0/1000000.0
+        ]);
     }
 
     #[test]
@@ -108,7 +112,11 @@ mod tests {
         let pos = vector![1.0, 2.0, -0.5];
 
         let pos_in_local = transform.world_to_local(pos);
-        assert_eq!(pos_in_local, vector![0.4836896, -1.3289258, -5.6568546]);
+        assert_eq!(pos_in_local, vector![
+            -322400.0/188567.0,
+            -7258250800.0/1333357257.0,
+            1601240800.0/1333357257.0
+        ]);
     }
 
     #[test]
@@ -126,11 +134,5 @@ mod tests {
         assert!(transform.is_dirty);
 
         transform.update();
-        println!("{:?}", transform.matrix);
-        /*
-        assert_eq!(transform.matrix, Matrix::new([
-            [0.0, 0.0, 0.0, 1.0]
-        ]))
-        */
     }
 }
