@@ -40,12 +40,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_transform_3d_vector() {
+    fn test_translate_point() {
         let matrix = Matrix4::new([
-            [1.0, 0.0, 0.0, 0.0], // Translation by (2, 3, 4)
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-            [2.0, 3.0, 4.0, 1.0],
+            [1.0, 0.0, 0.0, 2.0], // Translation by (2, 3, 4)
+            [0.0, 1.0, 0.0, 3.0],
+            [0.0, 0.0, 1.0, 4.0],
+            [0.0, 0.0, 0.0, 1.0],
         ]);
 
         let vector = Vector3::new([1.0, 2.0, 3.0]);
@@ -53,6 +53,38 @@ mod tests {
         let result = transform_3d_point(&matrix, vector);
 
         let expected = Vector3::new([3.0, 5.0, 7.0]);
-        assert_eq!(result.array(), expected.array());
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_rotate_point() {
+        let matrix = Matrix4::new([
+            [0.9397, 0.2418, 0.2418, 0.0],
+            [0.0000, 0.7071,-0.7071, 0.0],
+            [-0.3420, 0.6645, 0.6645, 0.0],
+            [0.0, 0.0, 0.0, 1.0]
+        ]);
+
+        let vector = Vector3::new([1.0, 2.0, 3.0]);
+        let result = transform_3d_point(&matrix, vector);
+        let expected = Vector3::new([2.1487, -0.7071, 2.9805]);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_transform_point() {
+        let matrix = Matrix4::new([
+            [0.9397, 0.2418, 0.2418, 2.0],
+            [0.0000, 0.7071,-0.7071, 3.0],
+            [-0.3420, 0.6645, 0.6645, 4.0],
+            [0.0, 0.0, 0.0, 1.0]
+        ]);
+
+        let vector = Vector3::new([1.0, 2.0, 3.0]);
+        let result = transform_3d_point(&matrix, vector);
+        let expected = Vector3::new([4.1486998, 2.2929, 6.9805]);
+
+        assert_eq!(result, expected);
     }
 }
