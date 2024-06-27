@@ -24,11 +24,11 @@ pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<FloatType>) -> Vecto
     for i in 0..Vector3::<FloatType>::SIZE {
         let mut sum_multiply = 0.0;
         for j in 0..Vector3::<FloatType>::SIZE {
-            sum_multiply += vector[j] * matrix[j][i];
+            sum_multiply += vector[j] * matrix[i][j];
         }
 
         // Add translation part
-        result_array[i] = sum_multiply + matrix[3][i];
+        result_array[i] = sum_multiply + matrix[i][3];
     }
 
     Vector3::new(result_array)
