@@ -41,7 +41,7 @@ impl Transform {
 
         // Update position
         for i in 0..3 {
-            self.matrix[3][i] = self.position[i];
+            self.matrix[i][3] = self.position[i];
         }
 
         // Update rotation and scale

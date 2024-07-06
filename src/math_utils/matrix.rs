@@ -27,8 +27,8 @@ impl<const N: usize> Matrix<N> {
     pub const SIZE: usize = N;
 
     pub fn invert(&self, is_homogenous: bool) -> Result<Matrix<N>, String> {
-        let total_row: usize = N;
-        let total_column: usize = if is_homogenous { N-1 } else { N };
+        let total_row: usize = if is_homogenous { N-1 } else { N };
+        let total_column: usize = N;
 
         let mut matrix = self.clone();
         let mut inv_matrix = Matrix::<N>::identity_matrix();
