@@ -92,3 +92,26 @@ pub use vector;
 pub mod prelude {
     pub use super::{Vector, vector, Vector2, Vector3, Vector4};
 }
+
+#[cfg(test)]
+pub mod tests {
+    use super::*;
+    use float_cmp::{approx_eq, ApproxEq};
+    use num_traits::Float;
+
+    impl<const N: usize, T: Float + ApproxEq> ApproxEq for Vector<N,T> {
+        type Margin = <T as ApproxEq>::Margin;
+
+        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+            let margin = margin.into();
+            self.0.into_iter()
+                .zip(other.0.into_iter())
+                .all(|(x,y)| x.approx_eq(y, margin))
+        }
+    }
+
+    pub fn approx_cmp_vector<const N: usize, T: Float + ApproxEq>
+    (vec1: Vector<N,T>, vec2: Vector<N,T>) {
+        assert!(approx_eq!(Vector<N,T>, vec1, vec2));
+    }
+}
