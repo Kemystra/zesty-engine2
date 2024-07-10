@@ -81,7 +81,12 @@ impl Transform {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::math_utils::vector::{vector, Vector};
+
+    use crate::math_utils::vector;
+    use vector::{vector, Vector};
+    use vector::tests::approx_cmp_vector;
+
+    use crate::math_utils::quaternion::tests::approx_cmp_quaternion;
 
     fn init_test_transform() -> Transform {
         let deg45 = std::f32::consts::FRAC_PI_4;
@@ -99,7 +104,7 @@ mod tests {
         let pos = vector![2.5, 1.89, 10.7];
 
         let pos_in_world = transform.local_to_world(pos);
-        assert_eq!(pos_in_world, vector![
+        approx_cmp_vector(pos_in_world, vector![
             547988391453.0/100000000000.0,
             100056555803.0/50000000000.0,
             1140247437279.0/100000000000.0
@@ -112,7 +117,7 @@ mod tests {
         let pos = vector![1.0, 2.0, -0.5];
 
         let pos_in_local = transform.world_to_local(pos);
-        assert_eq!(pos_in_local, vector![
+        approx_cmp_vector(pos_in_local, vector![
             -1209223815000000000.0/707106781005207013.0,
             -2721817732419718022000000000.0/499999999739863875201055153.0,
             600497389404096983000000000.0/499999999739863875201055153.0
@@ -129,7 +134,7 @@ mod tests {
 
         transform.rotate(rot);
         // Check if rotation is applied to rotation field first
-        assert_eq!(transform.rotation, initial_rotation * rot);
+        approx_cmp_quaternion(transform.rotation, initial_rotation * rot);
         // Check for dirty flag
         assert!(transform.is_dirty);
 
