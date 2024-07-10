@@ -189,7 +189,24 @@ fn scale_row<const N: usize>(
 
 #[cfg(test)]
 mod tests {
+    use float_cmp::{approx_eq, ApproxEq};
     use super::*;
+
+    impl<const N: usize> ApproxEq for Matrix<N> {
+        type Margin = <FloatType as ApproxEq>::Margin;
+
+        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+            let margin = margin.into();
+            self.0.into_iter()
+                .flatten()
+                .zip(other.0.into_iter().flatten())
+                .all(|(x,y)| x.approx_eq(y, margin))
+        }
+    }
+
+    fn approx_cmp(mat1: Matrix3, mat2: Matrix3) {
+        assert!(approx_eq!(Matrix3, mat1, mat2))
+    }
 
     #[test]
     fn test_ensure_pivot_non_zero() {
@@ -204,12 +221,12 @@ mod tests {
         let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
 
         assert_eq!(result, Ok(()));
-        assert_eq!(matrix, Matrix([
+        approx_cmp(matrix, Matrix([
             [1.00, 2.00, 9.00],
             [6.00, 3.00, 5.00],
             [3.00, 0.00, 8.00]
         ]));
-        assert_eq!(dummy_inv_matrix, Matrix([
+        approx_cmp(dummy_inv_matrix, Matrix([
             [1.00, 0.00, 0.00],
             [0.00, 0.00, 1.00],
             [0.00, 1.00, 0.00]
@@ -228,12 +245,12 @@ mod tests {
         let total_column = 3;
 
         forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        assert_eq!(matrix, Matrix([
+        approx_cmp(matrix, Matrix([
             [1.00, 2.00, 9.00],
             [0.00, 8.00, 0.00],
             [0.00, 0.00, -49.00]
         ]));
-        assert_eq!(dummy_inv_matrix, Matrix([
+        approx_cmp(dummy_inv_matrix, Matrix([
             [1.00, 0.00, 0.00],
             [0.00, 1.00, 0.00],
             [-6.00, 1.125, 1.00]
@@ -252,12 +269,12 @@ mod tests {
         let total_column = 3;
 
         scale_pivot_to_one(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        assert_eq!(matrix, Matrix([
+        approx_cmp(matrix, Matrix([
             [1.00, 2.00/4.00, 9.00/4.00],
             [0.00, 1.00, 7.00/8.00],
             [0.00, 0.00, 1.00]
         ]));
-        assert_eq!(dummy_inv_matrix, Matrix([
+        approx_cmp(dummy_inv_matrix, Matrix([
             [1.00/4.00, 0.00, 0.00],
             [0.00, 1.00/8.00, 0.00],
             [0.00, 0.00, 1.00/5.00],
@@ -280,8 +297,8 @@ mod tests {
         let total_column = 3;
 
         backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        assert_eq!(matrix, Matrix::<3>::identity_matrix());
-        assert_eq!(dummy_inv_matrix, Matrix([
+        approx_cmp(matrix, Matrix::<3>::identity_matrix());
+        approx_cmp(dummy_inv_matrix, Matrix([
             [1.25, -0.5, 1.0],
             [0.5, 1.0, -1.0],
             [1.0, 0.0, 1.0]
@@ -297,7 +314,7 @@ mod tests {
         ]);
 
         let inv_matrix = matrix.invert(false).unwrap();
-        assert_eq!(inv_matrix, Matrix([
+        approx_cmp(inv_matrix, Matrix([
             [-42600.00/44981.00, 63194.00/134943.00, -7210.00/134943.00],
             [-1000.00/44981.00, -206.00/134943.00, 1309.00/134943.00],
             [28100.00/44981.00, -21200.00/134943.00, 3700.00/134943.00]
