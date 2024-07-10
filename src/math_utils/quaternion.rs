@@ -123,29 +123,44 @@ impl Quaternion {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use float_cmp::{ApproxEq, approx_eq};
+
+    impl ApproxEq for Quaternion {
+        type Margin = <FloatType as ApproxEq>::Margin;
+        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+            let margin = margin.into();
+            self.0.into_iter()
+                .zip(other.0.into_iter())
+                .all(|(x,y)| x.approx_eq(y, margin))
+        }
+    }
+
+    fn approx_cmp_quaternion(q1: Quaternion, q2: Quaternion) {
+        assert!(approx_eq!(Quaternion, q1, q2))
+    }
 
     #[test]
     fn quaternion_from_euler_angle_x_only() {
         let q = Quaternion::from_euler_angles(1.0, 0.0, 0.0);
-        assert_eq!(q, Quaternion([0.87758255, 0.47942555, 0.0, 0.0]));
+        approx_cmp_quaternion(q, Quaternion([0.87758255, 0.47942555, 0.0, 0.0]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_y_only() {
         let q = Quaternion::from_euler_angles(0.0, 1.0, 0.0);
-        assert_eq!(q, Quaternion([0.87758255, 0.0, 0.47942555, 0.0]));
+        approx_cmp_quaternion(q, Quaternion([0.87758255, 0.0, 0.47942555, 0.0]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_z_only() {
         let q = Quaternion::from_euler_angles(0.0, 0.0, 1.0);
-        assert_eq!(q, Quaternion([0.87758255, 0.0, 0.0, 0.47942555]));
+        approx_cmp_quaternion(q, Quaternion([0.87758255, 0.0, 0.0, 0.47942555]));
     }
 
     #[test]
     fn quaternion_from_euler_angle_all() {
         let q = Quaternion::from_euler_angles(1.0, 1.0, 1.0);
-        assert_eq!(q, Quaternion([0.7860666, 0.16751876, 0.5709415, 0.1675188]));
+        approx_cmp_quaternion(q, Quaternion([0.7860666, 0.16751876, 0.5709415, 0.1675188]));
     }
 
     #[test]
@@ -159,7 +174,7 @@ mod tests {
         let mut q = Quaternion([69.0, 0.0, 0.0, 0.0]);
         q.normalize();
 
-        assert_eq!(q, Quaternion([1.0, 0.0, 0.0, 0.0]));
+        approx_cmp_quaternion(q, Quaternion([1.0, 0.0, 0.0, 0.0]));
     }
 
     #[test]
@@ -167,7 +182,7 @@ mod tests {
         let mut q = Quaternion([89.0, 89.0, 89.0, 89.0]);
         q.normalize();
 
-        assert_eq!(q, Quaternion([0.5, 0.5, 0.5, 0.5]));
+        approx_cmp_quaternion(q, Quaternion([0.5, 0.5, 0.5, 0.5]));
     }
 
     #[test]
@@ -179,11 +194,13 @@ mod tests {
 
         q.edit_3d_matrix(&mut mat, Vector3::one());
 
-        assert_eq!(mat, Matrix4::new([
-            [-0.1214509, -0.5418530, 0.8316519, 0.0],
-            [0.9904334, -0.1214509, 0.0655087, 0.0],
-            [0.0655087, 0.8316519, 0.5514197, 0.0],
-            [0.0, 0.0, 0.0, 1.0]
-        ]))
+        assert!(
+            approx_eq!(Matrix4, mat, Matrix4::new([
+                [-0.1214509, -0.5418530, 0.8316519, 0.0],
+                [0.9904334, -0.1214509, 0.0655087, 0.0],
+                [0.0655087, 0.8316519, 0.5514197, 0.0],
+                [0.0, 0.0, 0.0, 1.0]
+            ]))
+        );
     }
 }
