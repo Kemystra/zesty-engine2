@@ -188,7 +188,7 @@ fn scale_row<const N: usize>(
 
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use float_cmp::{approx_eq, ApproxEq};
     use super::*;
 
@@ -204,7 +204,7 @@ mod tests {
         }
     }
 
-    fn approx_cmp(mat1: Matrix3, mat2: Matrix3) {
+    pub fn approx_cmp_matrix(mat1: Matrix3, mat2: Matrix3) {
         assert!(approx_eq!(Matrix3, mat1, mat2))
     }
 
@@ -221,12 +221,12 @@ mod tests {
         let result = ensure_pivot_non_zero(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
 
         assert_eq!(result, Ok(()));
-        approx_cmp(matrix, Matrix([
+        approx_cmp_matrix(matrix, Matrix([
             [1.00, 2.00, 9.00],
             [6.00, 3.00, 5.00],
             [3.00, 0.00, 8.00]
         ]));
-        approx_cmp(dummy_inv_matrix, Matrix([
+        approx_cmp_matrix(dummy_inv_matrix, Matrix([
             [1.00, 0.00, 0.00],
             [0.00, 0.00, 1.00],
             [0.00, 1.00, 0.00]
@@ -245,12 +245,12 @@ mod tests {
         let total_column = 3;
 
         forward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        approx_cmp(matrix, Matrix([
+        approx_cmp_matrix(matrix, Matrix([
             [1.00, 2.00, 9.00],
             [0.00, 8.00, 0.00],
             [0.00, 0.00, -49.00]
         ]));
-        approx_cmp(dummy_inv_matrix, Matrix([
+        approx_cmp_matrix(dummy_inv_matrix, Matrix([
             [1.00, 0.00, 0.00],
             [0.00, 1.00, 0.00],
             [-6.00, 1.125, 1.00]
@@ -269,12 +269,12 @@ mod tests {
         let total_column = 3;
 
         scale_pivot_to_one(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        approx_cmp(matrix, Matrix([
+        approx_cmp_matrix(matrix, Matrix([
             [1.00, 2.00/4.00, 9.00/4.00],
             [0.00, 1.00, 7.00/8.00],
             [0.00, 0.00, 1.00]
         ]));
-        approx_cmp(dummy_inv_matrix, Matrix([
+        approx_cmp_matrix(dummy_inv_matrix, Matrix([
             [1.00/4.00, 0.00, 0.00],
             [0.00, 1.00/8.00, 0.00],
             [0.00, 0.00, 1.00/5.00],
@@ -297,8 +297,8 @@ mod tests {
         let total_column = 3;
 
         backward_substitution(&mut matrix, &mut dummy_inv_matrix, total_row, total_column);
-        approx_cmp(matrix, Matrix::<3>::identity_matrix());
-        approx_cmp(dummy_inv_matrix, Matrix([
+        approx_cmp_matrix(matrix, Matrix::<3>::identity_matrix());
+        approx_cmp_matrix(dummy_inv_matrix, Matrix([
             [1.25, -0.5, 1.0],
             [0.5, 1.0, -1.0],
             [1.0, 0.0, 1.0]
@@ -314,7 +314,7 @@ mod tests {
         ]);
 
         let inv_matrix = matrix.invert(false).unwrap();
-        approx_cmp(inv_matrix, Matrix([
+        approx_cmp_matrix(inv_matrix, Matrix([
             [-42600.00/44981.00, 63194.00/134943.00, -7210.00/134943.00],
             [-1000.00/44981.00, -206.00/134943.00, 1309.00/134943.00],
             [28100.00/44981.00, -21200.00/134943.00, 3700.00/134943.00]
