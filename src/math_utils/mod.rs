@@ -38,6 +38,7 @@ pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<FloatType>) -> Vecto
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::vector::tests::approx_cmp_vector;
 
     #[test]
     fn test_translate_point() {
@@ -53,7 +54,7 @@ mod tests {
         let result = transform_3d_point(&matrix, vector);
 
         let expected = Vector3::new([3.0, 5.0, 7.0]);
-        assert_eq!(result, expected);
+        approx_cmp_vector(result, expected);
     }
 
     #[test]
@@ -69,7 +70,7 @@ mod tests {
         let result = transform_3d_point(&matrix, vector);
         let expected = Vector3::new([2.1487, -0.7071, 2.9805]);
 
-        assert_eq!(result, expected);
+        approx_cmp_vector(result, expected);
     }
 
     #[test]
@@ -85,6 +86,6 @@ mod tests {
         let result = transform_3d_point(&matrix, vector);
         let expected = Vector3::new([4.1486998, 2.2929, 6.9805]);
 
-        assert_eq!(result, expected);
+        approx_cmp_vector(result, expected);
     }
 }
