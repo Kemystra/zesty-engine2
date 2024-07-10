@@ -56,20 +56,6 @@ impl<const N: usize> IndexMut<usize> for Matrix<N> {
     }
 }
 
-#[cfg(test)]
-impl<const N: usize> PartialEq for Matrix<N> {
-    fn eq(&self, other: &Self) -> bool {
-        for x in 0..N {
-            for y in 0..N {
-                let cmp = (self[x][y] - other[x][y]).abs() < FloatType::EPSILON;
-                if !cmp { return false }
-            }
-        }
-
-        true
-    }
-}
-
 impl<const N: usize> Debug for Matrix<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut pretty_arr = "".to_owned();

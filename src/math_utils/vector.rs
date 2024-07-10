@@ -1,5 +1,5 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
-use num_traits::{Num, Float};
+use num_traits::Num;
 
 
 #[derive(Clone, Copy)]
@@ -62,15 +62,6 @@ impl<const N: usize, T> Index<usize> for Vector<N,T> {
 impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.0[index]
-    }
-}
-
-impl<const N: usize, T> PartialEq for Vector<N,T>
-where T: Float {
-    fn eq(&self, other: &Self) -> bool {
-        self.0.into_iter()
-            .zip(other.0.into_iter())
-            .all(|(a,b)| (a-b).abs() < T::epsilon())
     }
 }
 
