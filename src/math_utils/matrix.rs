@@ -4,6 +4,7 @@ use std::ops::IndexMut;
 
 use float_cmp::ApproxEq;
 
+use super::FloatType;
 
 #[derive(Clone)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
