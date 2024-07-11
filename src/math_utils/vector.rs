@@ -3,8 +3,6 @@ use std::{fmt::Debug, ops::{Index, IndexMut}};
 use float_cmp::ApproxEq;
 use num_traits::Num;
 
-use super::FloatArrayWrapper;
-
 
 #[derive(Clone, Copy)]
 pub struct Vector<const N: usize, T>([T; N]);
@@ -60,11 +58,6 @@ where T: Debug {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Vector{}{:?}", N, self.0)
     }
-}
-
-impl<const N: usize, T: ApproxEq> FloatArrayWrapper for Vector<N,T> {
-    type Margin = <T as ApproxEq>::Margin;
-    type Item = T;
 }
 
 #[macro_export]

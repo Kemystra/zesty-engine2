@@ -4,8 +4,6 @@ use std::ops::IndexMut;
 
 use float_cmp::ApproxEq;
 
-use super::{FloatType, FloatArrayWrapper};
-
 
 #[derive(Clone)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
@@ -43,11 +41,6 @@ impl<const N: usize> Matrix<N> {
 
         Ok(inv_matrix)
     }
-}
-
-impl<const N: usize> FloatArrayWrapper for Matrix<N> {
-    type Margin = <FloatType as ApproxEq>::Margin;
-    type Item = [FloatType; N];
 }
 
 impl<const N: usize> Debug for Matrix<N> {

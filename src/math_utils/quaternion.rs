@@ -3,7 +3,7 @@ use std::ops::{Index, IndexMut, Mul, MulAssign};
 use float_cmp::ApproxEq;
 
 use super::matrix::Matrix4;
-use super::{vector::*, FloatArrayWrapper, FloatType};
+use super::{vector::*, FloatType};
 
 // This implementation of Quaternion does not care about the magnitude of itself. That is, it might
 // not be a unit quaternion.
@@ -105,11 +105,6 @@ impl Quaternion {
         matrix[2][1] = yz + wx;
         matrix[2][2] = (1.0 - xx - yy) * original_scale.z();
     }
-}
-
-impl FloatArrayWrapper for Quaternion {
-    type Margin = <FloatType as ApproxEq>::Margin;
-    type Item = FloatType;
 }
 
 #[cfg(test)]
