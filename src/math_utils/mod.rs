@@ -38,37 +38,35 @@ pub fn transform_3d_point(matrix: &Matrix4, vector: Vector3<FloatType>) -> Vecto
     Vector3::new(result_array)
 }
 
-pub trait FloatArrayWrapper {
-    type Margin;
-    type Item;
-}
+macro_rules! basic_math_types_impl (
+    ($type:ident, $margin_type:ident, $item_type:ident) => {
+        impl ApproxEq for T {
+            type Margin = $margin_type;
 
-impl<T: FloatArrayWrapper> ApproxEq for T {
-    type Margin = <T as FloatArrayWrapper>::Margin;
+            fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+                let margin = margin.into();
+                self.0.into_iter()
+                    .flatten()
+                    .zip(other.0.into_iter().flatten())
+                    .all(|(x,y)| x.approx_eq(y, margin))
+            }
+        }
 
-    fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
-        let margin = margin.into();
-        self.0.into_iter()
-            .flatten()
-            .zip(other.0.into_iter().flatten())
-            .all(|(x,y)| x.approx_eq(y, margin))
+        impl Index<usize> for T {
+            type Output = $item_type;
+
+            fn index(&self, index: usize) -> &Self::Output {
+                &self.0[index]
+            }
+        }
+
+        impl IndexMut<usize> for T {
+            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+                &mut self.0[index]
+            }
+        }
     }
-}
-
-impl<T: FloatArrayWrapper> Index<usize> for T {
-    type Output = <T as FloatArrayWrapper>::Item;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
-    }
-}
-
-impl<T: FloatArrayWrapper> IndexMut<usize> for T {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.0[index]
-    }
-}
-
+);
 
 #[cfg(test)]
 mod tests {
