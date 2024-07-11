@@ -1,8 +1,9 @@
 use std::ops::{Index, IndexMut, Mul, MulAssign};
 
+use float_cmp::ApproxEq;
+
 use super::matrix::Matrix4;
-use super::vector::*;
-use crate::math_utils::FloatType;
+use super::{vector::*, FloatArrayWrapper, FloatType};
 
 // This implementation of Quaternion does not care about the magnitude of itself. That is, it might
 // not be a unit quaternion.
@@ -120,20 +121,15 @@ impl Quaternion {
     }
 }
 
+impl FloatArrayWrapper for Quaternion {
+    type Margin = <FloatType as ApproxEq>::Margin;
+    type Item = FloatType;
+}
+
 #[cfg(test)]
 pub mod tests {
     use super::*;
     use float_cmp::{ApproxEq, approx_eq};
-
-    impl ApproxEq for Quaternion {
-        type Margin = <FloatType as ApproxEq>::Margin;
-        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
-            let margin = margin.into();
-            self.0.into_iter()
-                .zip(other.0.into_iter())
-                .all(|(x,y)| x.approx_eq(y, margin))
-        }
-    }
 
     pub fn approx_cmp_quaternion(q1: Quaternion, q2: Quaternion) {
         assert!(approx_eq!(Quaternion, q1, q2))

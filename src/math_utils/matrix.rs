@@ -1,7 +1,10 @@
 use std::fmt::Debug;
 use std::ops::Index;
 use std::ops::IndexMut;
-use super::FloatType;
+
+use float_cmp::ApproxEq;
+
+use super::{FloatType, FloatArrayWrapper};
 
 
 #[derive(Clone)]
@@ -40,6 +43,11 @@ impl<const N: usize> Matrix<N> {
 
         Ok(inv_matrix)
     }
+}
+
+impl<const N: usize> FloatArrayWrapper for Matrix {
+    type Margin = <FloatType as ApproxEq>::Margin;
+    type Item = [FloatType; N];
 }
 
 impl<const N: usize> Index<usize> for Matrix<N> {
@@ -191,22 +199,6 @@ fn scale_row<const N: usize>(
 pub mod tests {
     use float_cmp::{approx_eq, ApproxEq};
     use super::*;
-
-    impl<const N: usize> ApproxEq for Matrix<N> {
-        type Margin = <FloatType as ApproxEq>::Margin;
-
-        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
-            let margin = margin.into();
-            self.0.into_iter()
-                .flatten()
-                .zip(other.0.into_iter().flatten())
-                .all(|(x,y)| x.approx_eq(y, margin))
-        }
-    }
-
-    pub fn approx_cmp_matrix(mat1: Matrix3, mat2: Matrix3) {
-        assert!(approx_eq!(Matrix3, mat1, mat2))
-    }
 
     #[test]
     fn test_ensure_pivot_non_zero() {

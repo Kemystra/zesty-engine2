@@ -1,5 +1,9 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
+
+use float_cmp::ApproxEq;
 use num_traits::Num;
+
+use super::FloatArrayWrapper;
 
 
 #[derive(Clone, Copy)]
@@ -72,6 +76,11 @@ where T: Debug {
     }
 }
 
+impl<const N: usize, T: ApproxEq> FloatArrayWrapper for Vector<N,T> {
+    type Margin = <T as ApproxEq>::Margin;
+    type Item = T;
+}
+
 #[macro_export]
 macro_rules! vector [
     ($val:expr; $count:literal) => {
@@ -95,21 +104,6 @@ pub mod prelude {
 
 #[cfg(test)]
 pub mod tests {
-    use super::*;
-    use float_cmp::{approx_eq, ApproxEq};
-    use num_traits::Float;
-
-    impl<const N: usize, T: Float + ApproxEq> ApproxEq for Vector<N,T> {
-        type Margin = <T as ApproxEq>::Margin;
-
-        fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
-            let margin = margin.into();
-            self.0.into_iter()
-                .zip(other.0.into_iter())
-                .all(|(x,y)| x.approx_eq(y, margin))
-        }
-    }
-
     pub fn approx_cmp_vector<const N: usize, T: Float + ApproxEq>
     (vec1: Vector<N,T>, vec2: Vector<N,T>) {
         assert!(approx_eq!(Vector<N,T>, vec1, vec2));
