@@ -45,23 +45,9 @@ impl<const N: usize> Matrix<N> {
     }
 }
 
-impl<const N: usize> FloatArrayWrapper for Matrix {
+impl<const N: usize> FloatArrayWrapper for Matrix<N> {
     type Margin = <FloatType as ApproxEq>::Margin;
     type Item = [FloatType; N];
-}
-
-impl<const N: usize> Index<usize> for Matrix<N> {
-    type Output = [FloatType; N];
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
-    }
-}
-
-impl<const N: usize> IndexMut<usize> for Matrix<N> {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.0[index]
-    }
 }
 
 impl<const N: usize> Debug for Matrix<N> {

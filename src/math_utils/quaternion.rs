@@ -12,20 +12,6 @@ use super::{vector::*, FloatArrayWrapper, FloatType};
 #[derive(Debug, Clone, Copy)]
 pub struct Quaternion([FloatType; 4]);
 
-impl Index<usize> for Quaternion {
-    type Output = FloatType;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
-    }
-}
-
-impl IndexMut<usize> for Quaternion {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.0[index]
-    }
-}
-
 impl Mul for Quaternion {
     type Output = Quaternion;
 
