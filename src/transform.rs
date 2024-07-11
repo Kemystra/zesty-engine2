@@ -139,5 +139,7 @@ mod tests {
         assert!(transform.is_dirty);
 
         transform.update();
+
+        assert!(!transform.is_dirty);
     }
 }
