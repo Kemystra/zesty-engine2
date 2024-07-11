@@ -1830,3 +1830,7 @@ dependencies = [
 [[package]]
 name = "zesty_engine2_test_utils"
 version = "0.1.0"
+dependencies = [
+ "float-cmp",
+ "zesty_engine2",
+]
