@@ -1,4 +1,4 @@
-workspace = { members = ["zesty_engine2_derive"] }
+workspace = { members = ["zesty_engine2_derive", "zesty_engine2_test_utils"] }
 [package]
 name = "zesty_engine2"
 version = "0.1.0"
@@ -14,6 +14,9 @@ obj-rs = "0.7.1"
 softbuffer = "0.4.2"
 winit = "0.30.0"
 zesty_engine2_derive = { version = "0.1.0", path = "zesty_engine2_derive" }
+
+[dev-dependencies]
+zesty_engine2_test_utils = { version = "0.1.0", path = "zesty_engine2_test_utils" }
 
 [[bin]]
 name = "zesty_engine2"

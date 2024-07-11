@@ -1815,6 +1815,7 @@ dependencies = [
  "softbuffer",
  "winit",
  "zesty_engine2_derive",
+ "zesty_engine2_test_utils",
 ]
 
 [[package]]
@@ -1825,3 +1826,7 @@ dependencies = [
  "quote",
  "syn",
 ]
+
+[[package]]
+name = "zesty_engine2_test_utils"
+version = "0.1.0"
