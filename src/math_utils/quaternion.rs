@@ -26,6 +26,20 @@ impl IndexMut<usize> for Quaternion {
     }
 }
 
+impl ApproxEq for Quaternion {
+    type Margin = <FloatType as ApproxEq>::Margin;
+
+    fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+        let margin = margin.into();
+
+        for i in 0..4 {
+            if !self[i].approx_eq(other[i], margin) { return false }
+        }
+
+        true
+    }
+}
+
 impl Mul for Quaternion {
     type Output = Quaternion;
 
