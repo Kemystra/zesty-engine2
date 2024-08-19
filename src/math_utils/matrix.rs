@@ -44,6 +44,20 @@ impl<const N: usize> Matrix<N> {
     }
 }
 
+impl<const N: usize> Index<usize> for Matrix<N> {
+    type Output = [FloatType; N];
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
+impl<const N: usize> IndexMut<usize> for Matrix<N> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.0[index]
+    }
+}
+
 impl<const N: usize> Debug for Matrix<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut pretty_arr = "".to_owned();

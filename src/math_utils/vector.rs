@@ -53,6 +53,20 @@ where T: Num + Copy {
     }
 }
 
+impl<const N: usize, T> Index<usize> for Vector<N,T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
+impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.0[index]
+    }
+}
+
 impl<const N: usize, T> Debug for Vector<N,T>
 where T: Debug {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
