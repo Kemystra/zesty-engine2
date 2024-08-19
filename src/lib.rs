@@ -94,11 +94,10 @@ impl ApplicationHandler for App {
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;
-                println!("Redraw count: {}, FPS: {}",
-                    self.redraw_count,
-                    1_000_000 / now.elapsed().as_micros()
-                );
-
+                //println!("Redraw count: {}, FPS: {}",
+                //    self.redraw_count,
+                //    1_000_000 / now.elapsed().as_micros()
+                //);
             },
 
             _ => (),
