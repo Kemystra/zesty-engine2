@@ -139,7 +139,7 @@ fn forward_substitution<const N: usize>(
 
 fn scale_pivot_to_one<const N: usize>(
     matrix: &mut Matrix<N>, inv_matrix: &mut Matrix<N>,
-    total_row: usize, total_column: usize
+    _total_row: usize, total_column: usize
 ) -> () {
     // Divide each row to turn the pivot into 1
     for col in 0..total_column {
