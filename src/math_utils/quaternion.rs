@@ -141,7 +141,7 @@ impl Quaternion {
 #[cfg(test)]
 pub mod tests {
     use super::*;
-    use float_cmp::{ApproxEq, approx_eq};
+    use float_cmp::approx_eq;
 
     pub fn approx_cmp_quaternion(q1: Quaternion, q2: Quaternion) {
         assert!(approx_eq!(Quaternion, q1, q2))

@@ -209,8 +209,12 @@ fn scale_row<const N: usize>(
 
 #[cfg(test)]
 pub mod tests {
-    use float_cmp::{approx_eq, ApproxEq};
+    use float_cmp::approx_eq;
     use super::*;
+
+    fn approx_cmp_matrix<const N: usize>(a: Matrix<N>, b: Matrix<N>) {
+        assert!(approx_eq!(Matrix<N>, a, b))
+    }
 
     #[test]
     fn test_ensure_pivot_non_zero() {
