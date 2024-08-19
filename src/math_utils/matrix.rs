@@ -58,6 +58,22 @@ impl<const N: usize> IndexMut<usize> for Matrix<N> {
     }
 }
 
+impl<const N: usize> ApproxEq for Matrix<N> {
+    type Margin = <FloatType as ApproxEq>::Margin;
+
+    fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+        let margin = margin.into();
+
+        for i in 0..N {
+            for j in 0..N {
+                if !self[i][j].approx_eq(other[i][j], margin) { return false }
+            }
+        }
+
+        true
+    }
+}
+
 impl<const N: usize> Debug for Matrix<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut pretty_arr = "".to_owned();
