@@ -1,6 +1,7 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
 
-use num_traits::Num;
+use num_traits::{Float, Num};
+use float_cmp::ApproxEq;
 
 
 #[derive(Clone, Copy)]
@@ -66,6 +67,20 @@ impl<const N: usize, T> IndexMut<usize> for Vector<N,T> {
     }
 }
 
+impl<const N: usize, T: Float + ApproxEq> ApproxEq for Vector<N,T> {
+    type Margin = <T as ApproxEq>::Margin;
+
+    fn approx_eq<M: Into<Self::Margin>>(self, other: Self, margin: M) -> bool {
+        let margin = margin.into();
+
+        for i in 0..N {
+            if !self[i].approx_eq(other[i], margin) { return false }
+        }
+
+        true
+    }
+}
+
 impl<const N: usize, T> Debug for Vector<N,T>
 where T: Debug {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -97,7 +112,7 @@ pub mod prelude {
 #[cfg(test)]
 pub mod tests {
     use super::*;
-    use float_cmp::{ApproxEq, approx_eq};
+    use float_cmp::approx_eq;
     use num_traits::Float;
 
     pub fn approx_cmp_vector<const N: usize, T: Float + ApproxEq>
