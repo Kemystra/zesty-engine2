@@ -1,6 +1,5 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
 
-use float_cmp::ApproxEq;
 use num_traits::Num;
 
 
@@ -97,6 +96,10 @@ pub mod prelude {
 
 #[cfg(test)]
 pub mod tests {
+    use super::*;
+    use float_cmp::{ApproxEq, approx_eq};
+    use num_traits::Float;
+
     pub fn approx_cmp_vector<const N: usize, T: Float + ApproxEq>
     (vec1: Vector<N,T>, vec2: Vector<N,T>) {
         assert!(approx_eq!(Vector<N,T>, vec1, vec2));
