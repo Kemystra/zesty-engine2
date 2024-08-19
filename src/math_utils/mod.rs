@@ -5,8 +5,14 @@ pub mod quaternion;
 use matrix::Matrix4;
 use vector::Vector3;
 
+use std::ops::{Index, IndexMut};
+use float_cmp::ApproxEq;
+
 
 pub type FloatType = f32;
+
+// Subtrait to ensure that main math structs have the necessary traits
+trait MathStruct: ApproxEq + IndexMut<usize> + Index<usize> + PartialEq {}
 
 // IMPORTANT!
 // Any part of code that deals with angles should be assumed to use radians

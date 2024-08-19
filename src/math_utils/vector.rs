@@ -1,10 +1,12 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
 
+use super::MathStruct;
+
 use num_traits::{Float, Num};
 use float_cmp::ApproxEq;
 
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct Vector<const N: usize, T>([T; N]);
 
 pub type Vector3<T> = Vector<3,T>;
@@ -52,6 +54,8 @@ where T: Num + Copy {
         &self.0
     }
 }
+
+impl<const N: usize, T: ApproxEq + Float> MathStruct for Vector<N,T> {}
 
 impl<const N: usize, T> Index<usize> for Vector<N,T> {
     type Output = T;

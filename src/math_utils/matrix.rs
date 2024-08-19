@@ -4,9 +4,9 @@ use std::ops::IndexMut;
 
 use float_cmp::ApproxEq;
 
-use super::FloatType;
+use super::{FloatType, MathStruct};
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
 
 pub type Matrix3 = Matrix<3>;
@@ -43,6 +43,8 @@ impl<const N: usize> Matrix<N> {
         Ok(inv_matrix)
     }
 }
+
+impl<const N: usize> MathStruct for Matrix<N> {}
 
 impl<const N: usize> Index<usize> for Matrix<N> {
     type Output = [FloatType; N];
