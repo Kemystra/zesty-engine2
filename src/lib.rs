@@ -10,7 +10,6 @@ use winit::window::{Window, WindowId};
 use softbuffer::{Context, Surface};
 use clap::Parser;
 
-pub mod scene;
 pub mod renderer;
 pub mod math_utils;
 pub mod transform;
@@ -19,12 +18,11 @@ pub mod mesh;
 
 
 use crate::renderer::Renderer;
-use crate::scene::Scene;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {
-    scene_filename: String
+    filename: String
 }
 
 pub struct App {
@@ -60,7 +58,7 @@ impl ApplicationHandler for App {
         self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
         self.redraw_count = 0;
 
-        let scene = Scene::from_scene_file(&self.args.scene_filename);
+        let obj = (&self.args.filename);
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
