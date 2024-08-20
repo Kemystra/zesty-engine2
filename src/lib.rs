@@ -22,7 +22,8 @@ use crate::renderer::Renderer;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {
-    filename: String
+    filename: String,
+    scale: f32
 }
 
 pub struct App {

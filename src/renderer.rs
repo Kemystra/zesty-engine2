@@ -1,4 +1,4 @@
-use crate::scene::Scene;
+use crate::object::Object;
 
 
 pub struct Color(u32);
@@ -21,9 +21,7 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn render(&self, scene: Scene, buffer: &mut [u32]) {
-        // Read scene
-        // Open and load 3D objects
+    pub fn render(&self, obj: Object, buffer: &mut [u32]) {
         // Perform rasterization
         // Draw to buffer
     }
