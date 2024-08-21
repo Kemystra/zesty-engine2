@@ -1,4 +1,5 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
+use std::default::Default;
 
 use super::MathStruct;
 
@@ -56,6 +57,12 @@ where T: Num + Copy {
 }
 
 impl<const N: usize, T: ApproxEq + Float> MathStruct for Vector<N,T> {}
+
+impl<const N: usize, T: Num + Copy> Default for Vector<N,T> {
+    fn default() -> Self {
+        vector![T::zero(); N]
+    }
+}
 
 impl<const N: usize, T> Index<usize> for Vector<N,T> {
     type Output = T;
