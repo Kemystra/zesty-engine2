@@ -1,8 +1,22 @@
+use std::{error::Error, fs::File};
+use std::io::BufReader;
+
+use obj::{Obj, load_obj};
+
 use crate::transform::Transform;
-use crate::mesh::Mesh;
 
 
 pub struct Object {
     transform: Transform,
-    mesh: Option<Mesh>
+    mesh: Obj
+}
+
+impl Object {
+    pub fn new(filename: String) -> Result<Self, Box<dyn Error>> {
+        let input = BufReader::new(File::open(filename)?);
+        Ok(Self {
+            transform: Transform::default(),
+            mesh: load_obj(input)?
+        })
+    }
 }
