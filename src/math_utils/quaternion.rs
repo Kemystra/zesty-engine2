@@ -1,4 +1,5 @@
 use std::ops::{Index, IndexMut, Mul, MulAssign};
+use std::default::Default;
 
 use float_cmp::ApproxEq;
 
@@ -40,6 +41,12 @@ impl ApproxEq for Quaternion {
         }
 
         true
+    }
+}
+
+impl Default for Quaternion {
+    fn default() -> Self {
+        Self([1.0, 0.0, 0.0, 0.0])
     }
 }
 
