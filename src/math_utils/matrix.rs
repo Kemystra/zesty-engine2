@@ -32,6 +32,10 @@ impl<const N: usize> Matrix<N> {
         let total_row: usize = if is_homogenous { N-1 } else { N };
         let total_column: usize = N;
 
+        if *self == Self::identity_matrix() {
+            return Ok(self.clone());
+        }
+
         let mut matrix = self.clone();
         let mut inv_matrix = Matrix::<N>::identity_matrix();
 
