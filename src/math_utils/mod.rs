@@ -12,7 +12,7 @@ use float_cmp::ApproxEq;
 pub type FloatType = f32;
 
 // Subtrait to ensure that main math structs have the necessary traits
-trait MathStruct: ApproxEq + IndexMut<usize> + Index<usize> + PartialEq {}
+trait MathStruct: ApproxEq + IndexMut<usize> + Index<usize> + PartialEq + Default {}
 
 // Trait to add thin wrapper for ApproxEq
 pub trait ApproxCmp: ApproxEq {
