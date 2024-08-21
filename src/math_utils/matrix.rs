@@ -1,6 +1,7 @@
 use std::fmt::Debug;
 use std::ops::Index;
 use std::ops::IndexMut;
+use std::default::Default;
 
 use float_cmp::ApproxEq;
 
@@ -49,6 +50,12 @@ impl<const N: usize> Matrix<N> {
 }
 
 impl<const N: usize> MathStruct for Matrix<N> {}
+
+impl<const N: usize> Default for Matrix<N> {
+    fn default() -> Self {
+        Self::identity_matrix()
+    }
+}
 
 impl<const N: usize> Index<usize> for Matrix<N> {
     type Output = [FloatType; N];
