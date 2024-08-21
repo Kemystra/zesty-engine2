@@ -1,3 +1,5 @@
+use std::default::Default;
+
 use crate::math_utils;
 use math_utils::{FloatType, transform_3d_point};
 use math_utils::matrix::Matrix4;
@@ -74,6 +76,12 @@ impl Transform {
     pub fn rotate(&mut self, q: Quaternion) {
         self.rotation *= q;
         self.is_dirty = true;
+    }
+}
+
+impl Default for Transform {
+    fn default() -> Self {
+        Self::new(Vector3::<FloatType>::default(), Quaternion::default(), Vector3::<FloatType>::default())
     }
 }
 
