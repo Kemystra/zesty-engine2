@@ -14,7 +14,7 @@ pub type Vector3<T> = Vector<3,T>;
 pub type Vector4<T> = Vector<4,T>;
 pub type Vector2<T> = Vector<2,T>;
 
-impl<const N: usize, T> Vector<N,T>
+impl<const N: usize, T: Num + Copy> Vector<N,T>
 where T: Num + Copy {
     pub fn new(arr: [T; N]) -> Self {
         Self(arr)
