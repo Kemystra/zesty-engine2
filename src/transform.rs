@@ -8,6 +8,7 @@ use math_utils::vector::Vector3;
 
 
 // Any operation that impacts the field `matrix` must set the dirty flag
+#[derive(Debug)]
 pub struct Transform {
     matrix: Matrix4,
     inverse_matrix: Matrix4,
