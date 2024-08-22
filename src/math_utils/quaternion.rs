@@ -147,6 +147,8 @@ impl Quaternion {
 
 #[cfg(test)]
 pub mod tests {
+    use crate::math_utils::vector::tests::approx_cmp_vector;
+
     use super::*;
     use float_cmp::approx_eq;
 
