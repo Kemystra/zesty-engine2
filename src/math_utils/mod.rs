@@ -14,20 +14,6 @@ pub type FloatType = f32;
 // Subtrait to ensure that main math structs have the necessary traits
 trait MathStruct: ApproxEq + IndexMut<usize> + Index<usize> + PartialEq + Default {}
 
-// Trait to add thin wrapper for ApproxEq
-pub trait ApproxCmp: ApproxEq {
-    fn approx_cmp<T>(self, b: Self, margin: T)
-    where T: Into<<Self as ApproxEq>::Margin>;
-}
-
-// Blanket impl for ApproxCmp
-impl<T: MathStruct> ApproxCmp for T {
-    fn approx_cmp<R>(self, other: Self, margin: R)
-        where R: Into<<Self as ApproxEq>::Margin> {
-        assert!( self.approx_eq(other, margin) )
-    }
-}
-
 // IMPORTANT!
 // Any part of code that deals with angles should be assumed to use radians
 // All matrix are COLUMN-MAJOR and vectors are POST-MULTIPLIED with matrices.

@@ -1,7 +1,9 @@
 use std::f32::consts::FRAC_PI_4;
 
+use float_cmp::ApproxEq;
+
 use zesty_engine2::math_utils;
-use math_utils::{transform_3d_point, vector, matrix, quaternion, FloatType, ApproxCmp};
+use math_utils::{transform_3d_point, vector, matrix, quaternion, FloatType};
 use quaternion::Quaternion;
 use vector::prelude::*;
 use matrix::Matrix4;
@@ -20,7 +22,7 @@ fn test_translate_point() {
 
     let new_point = transform_3d_point(&matrix, point);
     println!("{:?}", new_point);
-    new_point.approx_cmp(vector![3.4, 5.6, 91.1], (1.0, 2));
+    new_point.approx_eq(vector![3.4, 5.6, 91.1], (1.0, 2));
 }
 
 fn rotation_test_helper(point: Vector3<FloatType>, rot: Quaternion, expected_point: Vector3<FloatType>) {
@@ -28,7 +30,7 @@ fn rotation_test_helper(point: Vector3<FloatType>, rot: Quaternion, expected_poi
     rot.edit_3d_matrix(&mut matrix, Vector3::one());
 
     let new_point = transform_3d_point(&matrix, point);
-    new_point.approx_cmp(expected_point, (1.0, 2));
+    new_point.approx_eq(expected_point, (1.0, 2));
 }
 
 #[test]
