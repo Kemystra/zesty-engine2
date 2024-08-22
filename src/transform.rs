@@ -82,7 +82,7 @@ impl Transform {
 
 impl Default for Transform {
     fn default() -> Self {
-        Self::new(Vector3::<FloatType>::default(), Quaternion::default(), Vector3::<FloatType>::default())
+        Self::new(Vector3::<FloatType>::default(), Quaternion::default(), Vector3::<FloatType>::one())
     }
 }
 
