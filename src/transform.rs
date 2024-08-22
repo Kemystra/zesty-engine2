@@ -91,6 +91,7 @@ mod tests {
     use super::*;
 
     use crate::math_utils::vector;
+    use float_cmp::ApproxEq;
     use vector::{vector, Vector};
     use vector::tests::approx_cmp_vector;
 
@@ -149,5 +150,12 @@ mod tests {
         transform.update();
 
         assert!(!transform.is_dirty);
+    }
+
+    #[test]
+    fn test_default_transform() {
+        let transform = Transform::default();
+        transform.matrix.approx_eq(Matrix4::identity_matrix(), (1.0, 1));
+        transform.inverse_matrix.approx_eq(Matrix4::identity_matrix(), (1.0, 1));
     }
 }
