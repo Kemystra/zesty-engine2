@@ -39,7 +39,7 @@ impl Display for ObjectError {
 }
 
 impl Object {
-    pub fn new(filename: String) -> Result<Self, ObjError> {
+    pub fn new(filename: &str) -> Result<Self, ObjError> {
         let input = BufReader::new(File::open(filename)?);
         Ok(Self {
             transform: Transform::default(),
