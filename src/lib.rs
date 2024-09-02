@@ -2,6 +2,7 @@ use std::rc::Rc;
 use std::time::Instant;
 use std::num::NonZeroU32;
 
+use object::Object;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::ActiveEventLoop;
@@ -32,17 +33,20 @@ pub struct App {
     redraw_count: usize,
     args: Arguments,
 
+    object: Object,
     renderer: Renderer
 }
 
 impl App {
     pub fn new(args: Arguments) -> Self {
+        let obj = Object::new(&args.filename).expect("Error in loading file");
         Self {
             window: None,
             surface: None,
             redraw_count: 0,
             args,
 
+            object: obj,
             renderer: Renderer::new()
         }
     }
@@ -58,8 +62,6 @@ impl ApplicationHandler for App {
         let context = Context::new(Rc::clone(&window)).unwrap();
         self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
         self.redraw_count = 0;
-
-        let obj = &self.args.filename;
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
