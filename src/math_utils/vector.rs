@@ -101,7 +101,7 @@ where T: Debug {
 
 #[macro_export]
 macro_rules! vector [
-    ($val:expr; $count:literal) => {
+    ($val:expr; $count:expr) => {
         Vector::new([$val; $count])
     };
 
