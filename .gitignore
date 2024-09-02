@@ -1,2 +1,3 @@
 /target
 /src/matrix_gen.py
+*.obj
