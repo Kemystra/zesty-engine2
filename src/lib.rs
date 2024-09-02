@@ -22,6 +22,7 @@ use crate::renderer::Renderer;
 #[command(version, about, long_about = None)]
 pub struct Arguments {
     filename: String,
+    distance: f32,
     scale: f32
 }
 
