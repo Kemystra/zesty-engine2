@@ -59,7 +59,7 @@ impl ApplicationHandler for App {
         self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
         self.redraw_count = 0;
 
-        let obj = (&self.args.filename);
+        let obj = &self.args.filename;
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
