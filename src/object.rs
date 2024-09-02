@@ -46,4 +46,12 @@ impl Object {
             mesh: load_obj(input)?
         })
     }
+
+    pub fn mesh(&self) -> &Obj {
+        &self.mesh
+    }
+
+    pub fn transform(&self) -> &Transform {
+        &self.transform
+    }
 }
