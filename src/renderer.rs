@@ -21,7 +21,7 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn render(&self, obj: Object, buffer: &mut [u32]) {
+    pub fn render(&self, obj: &Object, buffer: &mut [u32]) {
         println!("{:?}", obj.mesh().vertices);
         // Perform rasterization
         // Draw to buffer
