@@ -92,6 +92,7 @@ impl ApplicationHandler for App {
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
                 // Render here
+                self.renderer.render(&self.object, &mut buffer);
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;
