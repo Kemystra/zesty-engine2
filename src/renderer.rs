@@ -1,4 +1,6 @@
 use crate::object::Object;
+use crate::math_utils::{vector, matrix};
+use vector::Vector3;
 
 
 pub struct Color(u32);
@@ -22,7 +24,10 @@ pub struct Renderer {
 
 impl Renderer {
     pub fn render(&self, obj: &Object, buffer: &mut [u32]) {
-        println!("{:?}", obj.mesh().vertices);
+        obj.mesh().vertices.into_iter().for_each(|vert| {
+            let pos = Vector3::new(vert.position);
+            let world_pos = obj.transform().local_to_world(pos);
+        })
         // Perform rasterization
         // Draw to buffer
     }
