@@ -1,4 +1,4 @@
-workspace = { members = ["zesty_engine2_derive", "zesty_engine2_test_utils"] }
+workspace = {}
 [package]
 name = "zesty_engine2"
 version = "0.1.0"
