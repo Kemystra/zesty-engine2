@@ -5,7 +5,7 @@ use std::default::Default;
 
 use float_cmp::ApproxEq;
 
-use super::{FloatType, MathStruct};
+use super::{FloatType, MathStruct, vector::{Vector, vector}};
 
 #[derive(Clone, PartialEq)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
@@ -46,6 +46,21 @@ impl<const N: usize> Matrix<N> {
         backward_substitution(&mut matrix, &mut inv_matrix, total_row, total_column);
 
         Ok(inv_matrix)
+    }
+
+    pub fn multiply_vector(&self, vector: Vector<N,FloatType>) -> Vector<N,FloatType> {
+        let mut result_array = [0.0; N];
+
+        for i in 0..Vector::<N, FloatType>::SIZE {
+            let mut sum_multiply = 0.0;
+            for j in 0..Vector::<N, FloatType>::SIZE {
+                sum_multiply += vector[j] * self[i][j];
+            }
+
+            result_array[i] = sum_multiply;
+        }
+
+        Vector::new(result_array)
     }
 }
 
@@ -338,5 +353,24 @@ pub mod tests {
             [-1000.00/44981.00, -206.00/134943.00, 1309.00/134943.00],
             [28100.00/44981.00, -21200.00/134943.00, 3700.00/134943.00]
         ]));
+    }
+
+    #[test]
+    fn test_multiply_vector() {
+        let matrix = Matrix([
+            [6.22, -12.64, -12.80, 4.54],
+            [8.34, 1.38, -6.47, 2.80],
+            [-2.20, 0.86, 7.82, -8.86],
+            [11.81, 10.94, -8.89, -14.73]
+        ]);
+
+        let vector = Vector::new([1.0, 2.0, 4.0, 1.0]);
+        let result = matrix.multiply_vector(vector);
+
+        assert!(
+        result.approx_eq(
+            vector![-1643.0/25.0, -599.0/50.0, 1097.0/50.0, -83.0/5.0],
+            (1.0, 2)
+        ));
     }
 }
