@@ -15,6 +15,7 @@ pub mod renderer;
 pub mod math_utils;
 pub mod transform;
 pub mod object;
+pub mod camera;
 
 
 use crate::renderer::Renderer;
