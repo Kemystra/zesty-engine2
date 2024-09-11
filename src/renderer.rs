@@ -1,5 +1,6 @@
 use crate::object::Object;
 use crate::math_utils::{vector, matrix};
+use crate::camera::Camera;
 use vector::Vector3;
 
 
@@ -23,7 +24,7 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn render(&self, obj: &Object, buffer: &mut [u32]) {
+    pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) {
         obj.mesh().vertices.iter().for_each(|vert| {
             let pos = Vector3::new(vert.position);
             let world_pos = obj.transform().local_to_world(pos);
