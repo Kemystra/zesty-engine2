@@ -17,8 +17,8 @@ pub mod transform;
 pub mod object;
 pub mod camera;
 
-
 use crate::renderer::Renderer;
+use crate::camera::Camera;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -35,7 +35,8 @@ pub struct App {
     args: Arguments,
 
     object: Object,
-    renderer: Renderer
+    renderer: Renderer,
+    camera: Camera
 }
 
 impl App {
@@ -48,7 +49,8 @@ impl App {
             args,
 
             object: obj,
-            renderer: Renderer::new()
+            renderer: Renderer::new(),
+            camera: Camera::new()
         }
     }
 }
@@ -93,7 +95,7 @@ impl ApplicationHandler for App {
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
                 // Render here
-                self.renderer.render(&self.object, &mut buffer);
+                self.renderer.render(&self.object, &self.camera, &mut buffer);
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;
