@@ -12,6 +12,7 @@ pub struct Object {
     mesh: Obj
 }
 
+#[derive(Debug)]
 pub enum ObjectError {
     IOError(io::Error),
     ObjError(ObjError)
@@ -39,7 +40,7 @@ impl Display for ObjectError {
 }
 
 impl Object {
-    pub fn new(filename: &str) -> Result<Self, ObjError> {
+    pub fn new(filename: &str) -> Result<Self, ObjectError> {
         let input = BufReader::new(File::open(filename)?);
         Ok(Self {
             transform: Transform::default(),
