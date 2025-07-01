@@ -1,54 +1,25 @@
-use std::fs::File;
-use std::io::{BufReader, self};
-use std::fmt::Display;
-
-use obj::{Obj, load_obj, ObjError};
+use tobj::{load_obj, LoadError, Mesh};
 
 use crate::transform::Transform;
 
 
 pub struct Object {
     transform: Transform,
-    mesh: Obj
-}
-
-#[derive(Debug)]
-pub enum ObjectError {
-    IOError(io::Error),
-    ObjError(ObjError)
-}
-
-impl From<io::Error> for ObjectError {
-    fn from(value: io::Error) -> Self {
-        Self::IOError(value)
-    }
-}
-
-impl From<ObjError> for ObjectError {
-    fn from(value: ObjError) -> Self {
-        Self::ObjError(value)
-    }
-}
-
-impl Display for ObjectError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::IOError(err) => err.fmt(f),
-            Self::ObjError(err) => err.fmt(f)
-        }
-    }
+    mesh: Mesh
 }
 
 impl Object {
-    pub fn new(filename: &str) -> Result<Self, ObjectError> {
-        let input = BufReader::new(File::open(filename)?);
+    pub fn new(filename: &str) -> Result<Self, LoadError> {
+        let (mut models, _) = load_obj(filename, &tobj::GPU_LOAD_OPTIONS)?;
+
         Ok(Self {
             transform: Transform::default(),
-            mesh: load_obj(input)?
+            // Get the first model, since we are assuming there will only be 1 mesh
+            mesh: models.swap_remove(0).mesh
         })
     }
 
-    pub fn mesh(&self) -> &Obj {
+    pub fn mesh(&self) -> &Mesh {
         &self.mesh
     }
 
