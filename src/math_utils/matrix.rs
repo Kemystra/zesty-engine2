@@ -5,7 +5,7 @@ use std::default::Default;
 
 use float_cmp::ApproxEq;
 
-use super::{FloatType, MathStruct, vector::{Vector, vector}};
+use super::{FloatType, vector::{Vector, vector}};
 
 #[derive(Clone, PartialEq)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
@@ -63,8 +63,6 @@ impl<const N: usize> Matrix<N> {
         Vector::new(result_array)
     }
 }
-
-impl<const N: usize> MathStruct for Matrix<N> {}
 
 impl<const N: usize> Default for Matrix<N> {
     fn default() -> Self {

@@ -1,8 +1,6 @@
 use std::{fmt::Debug, ops::{Index, IndexMut}};
 use std::default::Default;
 
-use super::MathStruct;
-
 use num_traits::{Float, Num};
 use float_cmp::ApproxEq;
 
@@ -55,8 +53,6 @@ where T: Num + Copy {
         &self.0
     }
 }
-
-impl<const N: usize, T: ApproxEq + Float> MathStruct for Vector<N,T> {}
 
 impl<const N: usize, T: Num + Copy> Default for Vector<N,T> {
     fn default() -> Self {
