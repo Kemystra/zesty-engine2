@@ -2,7 +2,7 @@ use crate::transform::Transform;
 
 
 pub struct Camera {
-    transform: Transform
+    pub transform: Transform
 }
 
 impl Camera {
