@@ -1,3 +1,4 @@
+use crate::math_utils::vector::Vector3;
 use crate::transform::Transform;
 use crate::math_utils::FloatType;
 
@@ -28,9 +29,9 @@ impl ProjectionData {
             1.0 / (ASPECT_RATIO * tan_half_pov),
             // height scaler
             1.0 / tan_half_pov,
-            // z scaler
+            // z scaler * m1
             1.0 / near_far_diff,
-            // z repositioning
+            // z repositioning * m2
             n / near_far_diff
         )
     }
@@ -51,5 +52,14 @@ impl Camera {
                 n, f, fov
             )
         }
+    }
+
+    pub fn project_to_ncd_space(&self, point: Vector3<FloatType>) -> Vector3<FloatType> {
+        let ProjectionData(w_scaler, h_scaler, z_1, z_2) = self.projection_data;
+        Vector3::new([
+            (point.x() * w_scaler) / point.z(),
+            (point.y() * h_scaler) / point.z(),
+            ((point.z() * z_1) + z_2) / point.z()
+        ])
     }
 }
