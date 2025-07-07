@@ -50,7 +50,7 @@ impl App {
 
             object: obj,
             renderer: Renderer::new(),
-            camera: Camera::new()
+            camera: Camera::new(1.0, 100.0, 60.0)
         }
     }
 }
