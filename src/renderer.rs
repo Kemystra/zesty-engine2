@@ -1,3 +1,5 @@
+use num_traits::Saturating;
+
 use crate::math_utils::vector::{Vector, Vector2};
 use crate::math_utils::FloatType;
 use crate::object::Object;
@@ -51,10 +53,16 @@ impl Renderer {
         const SIDE_LENGTH: usize = 13;
         const HALF_SIDE: usize = SIDE_LENGTH / 2;
 
+        let start = Vector2::new([
+            center.x().saturating_sub(HALF_SIDE),
+            center.y().saturating_sub(HALF_SIDE)
+        ]);
+
+        // Draw a square of `SIDE_LENGTH` centered at `center`
         for x in 0..=2*HALF_SIDE {
             for y in 0..=2*HALF_SIDE {
                 let index = self.cartesian_to_index(
-                    center + Vector2::<usize>::new([x - HALF_SIDE, y - HALF_SIDE])
+                    start + Vector2::<usize>::new([x, y])
                 );
 
                 buffer[index] = Color::WHITE.u32_color();
