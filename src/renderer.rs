@@ -45,12 +45,14 @@ impl Renderer {
             ]);
 
             self.draw_centered_square(buffer, screen_pos);
+            self.draw_vertex(buffer, screen_pos);
         })
         // Perform rasterization
         // Draw to buffer
     }
 
-    fn draw_centered_square(&self, buffer: &mut [u32], center: Vector2<usize>) {
+    // Draw a square of `SIDE_LENGTH` centered at `center`
+    fn draw_vertex(&self, buffer: &mut [u32], center: Vector2<usize>) {
         const SIDE_LENGTH: usize = 13;
         const HALF_SIDE: usize = SIDE_LENGTH / 2;
 
