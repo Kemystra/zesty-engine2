@@ -40,11 +40,10 @@ impl Renderer {
             let cam_pos = camera.transform.world_to_local(world_pos);
             let ncd_pos = camera.project_to_ncd_space(cam_pos);
             let screen_pos = Vector2::new([
-                (ncd_pos.x() * self.buffer_width as FloatType) as usize,
-                (ncd_pos.y() * self.buffer_height as FloatType) as usize
+                (((ncd_pos.x() + 1.0) * 0.5) * self.buffer_width as FloatType) as usize,
+                (((ncd_pos.y() + 1.0) * 0.5) * self.buffer_height as FloatType) as usize
             ]);
 
-            self.draw_centered_square(buffer, screen_pos);
             self.draw_vertex(buffer, screen_pos);
         })
         // Perform rasterization
