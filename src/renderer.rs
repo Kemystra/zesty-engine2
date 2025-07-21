@@ -6,6 +6,7 @@ use crate::object::Object;
 use crate::camera::Camera;
 
 
+#[derive(Clone, Copy)]
 pub struct Color(u32);
 
 impl Color {
@@ -58,20 +59,19 @@ impl Renderer {
             center.y().saturating_sub(HALF_SIDE)
         ]);
 
-        // Draw a square of `SIDE_LENGTH` centered at `center`
         for x in 0..=2*HALF_SIDE {
             for y in 0..=2*HALF_SIDE {
-                let index = self.cartesian_to_index(
-                    start + Vector2::<usize>::new([x, y])
+                self.draw_pixel(
+                    buffer,
+                    start + Vector2::<usize>::new([x, y]),
+                    Color::WHITE
                 );
-
-                buffer[index] = Color::WHITE.u32_color();
             }
         }
     }
 
-    fn cartesian_to_index(&self, position: Vector2<usize>) -> usize {
-        position.x() + (position.y() * self.buffer_height)
+    fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) {
+        buffer[position.x() + (position.y() * self.buffer_height)] = color.u32_color();
     }
 
     pub fn new() -> Self {
