@@ -1,4 +1,4 @@
-use std::{fmt::Debug, ops::{Index, IndexMut}};
+use std::{fmt::Debug, ops::{Index, IndexMut, Add}};
 use std::default::Default;
 
 use num_traits::{Float, Num};
@@ -85,6 +85,19 @@ impl<const N: usize, T: Float + ApproxEq> ApproxEq for Vector<N,T> {
         }
 
         true
+    }
+}
+
+/* Arithmetic Operations */
+impl<const N: usize, T: Num + Copy> Add for Vector<N, T> {
+    type Output = Vector<N, T>;
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut output = Vector::<N,T>::new([T::zero(); N]);
+        for i in 0..N {
+            output.0[i] = self.0[i] + rhs.0[i];
+        }
+
+        output
     }
 }
 
