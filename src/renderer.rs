@@ -1,3 +1,5 @@
+use crate::math_utils::vector::{Vector, Vector2};
+use crate::math_utils::FloatType;
 use crate::object::Object;
 use crate::camera::Camera;
 
@@ -5,6 +7,13 @@ use crate::camera::Camera;
 pub struct Color(u32);
 
 impl Color {
+    // Common colors
+    const WHITE: Self = Self(0x00_ff_ff_ff);
+    const BLACK: Self = Self(0x00_00_00_00);
+    const RED: Self = Self(0x00_ff_00_00);
+    const GREEN: Self = Self(0x00_00_ff_00);
+    const BLUE: Self = Self(0x00_00_00_ff);
+
     pub fn from_rgb(r: u8, g: u8, b: u8) -> Self {
         Self (
             ((r as u32) << 16) | ((g as u32) << 8) | (b as u32)
@@ -26,9 +35,35 @@ impl Renderer {
         obj.mesh.vertices.iter().for_each(|vert| {
             let world_pos = obj.transform.local_to_world(*vert);
             let cam_pos = camera.transform.world_to_local(world_pos);
+            let ncd_pos = camera.project_to_ncd_space(cam_pos);
+            let screen_pos = Vector2::new([
+                (ncd_pos.x() * self.buffer_width as FloatType) as usize,
+                (ncd_pos.y() * self.buffer_height as FloatType) as usize
+            ]);
+
+            self.draw_centered_square(buffer, screen_pos);
         })
         // Perform rasterization
         // Draw to buffer
+    }
+
+    fn draw_centered_square(&self, buffer: &mut [u32], center: Vector2<usize>) {
+        const SIDE_LENGTH: usize = 13;
+        const HALF_SIDE: usize = SIDE_LENGTH / 2;
+
+        for x in 0..=2*HALF_SIDE {
+            for y in 0..=2*HALF_SIDE {
+                let index = self.cartesian_to_index(
+                    center + Vector2::<usize>::new([x - HALF_SIDE, y - HALF_SIDE])
+                );
+
+                buffer[index] = Color::WHITE.u32_color();
+            }
+        }
+    }
+
+    fn cartesian_to_index(&self, position: Vector2<usize>) -> usize {
+        position.x() + (position.y() * self.buffer_height)
     }
 
     pub fn new() -> Self {
