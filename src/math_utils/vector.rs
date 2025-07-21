@@ -1,4 +1,4 @@
-use std::{fmt::Debug, ops::{Index, IndexMut, Add}};
+use std::{fmt::Debug, ops::{Index, IndexMut, Add, Sub}};
 use std::default::Default;
 
 use num_traits::{Float, Num};
@@ -95,6 +95,18 @@ impl<const N: usize, T: Num + Copy> Add for Vector<N, T> {
         let mut output = Vector::<N,T>::new([T::zero(); N]);
         for i in 0..N {
             output.0[i] = self.0[i] + rhs.0[i];
+        }
+
+        output
+    }
+}
+
+impl<const N: usize, T: Num + Copy> Sub for Vector<N, T> {
+    type Output = Vector<N, T>;
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut output = Vector::<N,T>::new([T::zero(); N]);
+        for i in 0..N {
+            output.0[i] = self.0[i] - rhs.0[i];
         }
 
         output
