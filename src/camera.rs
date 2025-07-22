@@ -62,4 +62,12 @@ impl Camera {
             ((point.z() * z_1) + z_2) / point.z()
         ])
     }
+
+    pub fn update_projection_data(&mut self) {
+        self.projection_data = ProjectionData::generate(
+            self.near_plane_distance,
+            self.far_plane_distance,
+            self.vertical_fov_angle
+        );
+    }
 }
