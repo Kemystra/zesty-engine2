@@ -5,7 +5,7 @@ use std::default::Default;
 
 use float_cmp::ApproxEq;
 
-use super::{FloatType, vector::{Vector, vector}};
+use super::{FloatType, vector::Vector};
 
 #[derive(Clone, PartialEq)]
 pub struct Matrix<const N: usize>([[FloatType; N]; N]);
@@ -234,6 +234,7 @@ fn scale_row<const N: usize>(
 #[cfg(test)]
 pub mod tests {
     use float_cmp::approx_eq;
+    use super::super::vector::vector;
     use super::*;
 
     fn approx_cmp_matrix<const N: usize>(a: Matrix<N>, b: Matrix<N>) {
