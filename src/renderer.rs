@@ -105,3 +105,64 @@ impl Renderer {
         self.buffer_height = height;
     }
 }
+
+
+#[cfg(test)]
+pub mod tests {
+
+    use super::*;
+
+    fn init_renderer_and_buffer() -> (Renderer, [u32; 10_000]) { 
+        let mut renderer = Renderer::new();
+        let buffer = [0_u32; 10_000];
+        renderer.update_buffer_size(100, 100);
+
+        (renderer, buffer)
+    }
+
+    #[test]
+    fn test_draw_pixel() {
+        let (renderer, mut buffer) = init_renderer_and_buffer();
+        renderer.draw_pixel(
+            &mut buffer,
+            Vector2::new([10, 90]),
+            Color::WHITE
+        ).unwrap();
+
+        let mut correct_buffer = [0_u32; 10_000];
+        correct_buffer[9010] = Color::WHITE.u32_color();
+
+        assert_eq!(buffer, correct_buffer);
+    }
+
+    #[test]
+    fn test_draw_pixel_out_of_bounds() {
+        let (renderer, mut buffer) = init_renderer_and_buffer();
+        let result = renderer.draw_pixel(
+            &mut buffer,
+            Vector2::new([100, 100]),
+            Color::WHITE
+        );
+
+        assert_eq!(
+            result,
+            Err(RendererError::OutOfBounds(Vector2::new([100, 100])))
+        )
+    }
+
+    #[test]
+    fn test_draw_vertex() {
+        let (renderer, mut buffer) = init_renderer_and_buffer();
+        renderer.draw_vertex(&mut buffer, Vector2::new([20,20])).unwrap();
+
+        // manually draw the vertex
+        let mut correct_buffer = [0_u32; 10_000];
+        for x in 14..=26 {
+            for y in 14..=26 {
+                renderer.draw_pixel(&mut correct_buffer, Vector2::new([x, y]), VERTEX_COLOR).unwrap();
+            }
+        }
+
+        assert_eq!(buffer, correct_buffer);
+    }
+}
