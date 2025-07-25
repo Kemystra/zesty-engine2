@@ -6,6 +6,7 @@ use crate::object::Object;
 use crate::camera::Camera;
 
 const VERTEX_SIZE: usize = 13;
+const VERTEX_COLOR: Color = Color::WHITE;
 
 #[derive(Clone, Copy)]
 pub struct Color(u32);
@@ -73,7 +74,7 @@ impl Renderer {
                 self.draw_pixel(
                     buffer,
                     start + Vector2::<usize>::new([x, y]),
-                    Color::WHITE
+                    VERTEX_COLOR
                 )?;
             }
         }
