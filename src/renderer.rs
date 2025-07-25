@@ -1,6 +1,6 @@
-use num_traits::Saturating;
+use thiserror::Error;
 
-use crate::math_utils::vector::{Vector, Vector2};
+use crate::math_utils::vector::Vector2;
 use crate::math_utils::FloatType;
 use crate::object::Object;
 use crate::camera::Camera;
@@ -33,9 +33,15 @@ pub struct Renderer {
     buffer_height: usize
 }
 
+#[derive(Debug, Error, PartialEq)]
+pub enum RendererError {
+    #[error("Attempted to draw out of buffer bounds")]
+    OutOfBounds(Vector2<usize>)
+}
+
 impl Renderer {
-    pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) {
-        obj.mesh.vertices.iter().for_each(|vert| {
+    pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
+        for vert in &obj.mesh.vertices {
             let world_pos = obj.transform.local_to_world(*vert);
             let cam_pos = camera.transform.world_to_local(world_pos);
             let ncd_pos = camera.project_to_ncd_space(cam_pos);
@@ -44,14 +50,15 @@ impl Renderer {
                 (((ncd_pos.y() + 1.0) * 0.5) * self.buffer_height as FloatType) as usize
             ]);
 
-            self.draw_vertex(buffer, screen_pos);
-        })
+            self.draw_vertex(buffer, screen_pos)?;
+        }
         // Perform rasterization
         // Draw to buffer
+        Ok(())
     }
 
     // Draw a square of `SIDE_LENGTH` centered at `center`
-    fn draw_vertex(&self, buffer: &mut [u32], center: Vector2<usize>) {
+    fn draw_vertex(&self, buffer: &mut [u32], center: Vector2<usize>) -> Result<(), RendererError> {
         const SIDE_LENGTH: usize = 13;
         const HALF_SIDE: usize = SIDE_LENGTH / 2;
 
@@ -66,13 +73,22 @@ impl Renderer {
                     buffer,
                     start + Vector2::<usize>::new([x, y]),
                     Color::WHITE
-                );
+                )?;
             }
         }
+
+        Ok(())
     }
 
-    fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) {
-        buffer[position.x() + (position.y() * self.buffer_height)] = color.u32_color();
+    fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
+        if let Some(pixel) = buffer.get_mut(position.x() + (position.y() * self.buffer_height)) {
+            *pixel = color.u32_color();
+        }
+        else {
+            return Err(RendererError::OutOfBounds(position));
+        }
+
+        Ok(())
     }
 
     pub fn new() -> Self {
