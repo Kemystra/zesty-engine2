@@ -5,6 +5,7 @@ use crate::math_utils::FloatType;
 use crate::object::Object;
 use crate::camera::Camera;
 
+const VERTEX_SIZE: usize = 13;
 
 #[derive(Clone, Copy)]
 pub struct Color(u32);
@@ -54,13 +55,13 @@ impl Renderer {
         }
         // Perform rasterization
         // Draw to buffer
+
         Ok(())
     }
 
     // Draw a square of `SIDE_LENGTH` centered at `center`
     fn draw_vertex(&self, buffer: &mut [u32], center: Vector2<usize>) -> Result<(), RendererError> {
-        const SIDE_LENGTH: usize = 13;
-        const HALF_SIDE: usize = SIDE_LENGTH / 2;
+        const HALF_SIDE: usize = VERTEX_SIZE / 2;
 
         let start = Vector2::new([
             center.x().saturating_sub(HALF_SIDE),
