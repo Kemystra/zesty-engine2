@@ -30,6 +30,7 @@ impl Color {
     }
 }
 
+#[derive(Debug)]
 pub struct Renderer {
     buffer_width: usize,
     buffer_height: usize
@@ -82,8 +83,8 @@ impl Renderer {
         Ok(())
     }
 
-    fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
-        if let Some(pixel) = buffer.get_mut(position.x() + (position.y() * self.buffer_height)) {
+    pub fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
+        if let Some(pixel) = buffer.get_mut(position.x() + (position.y() * self.buffer_width)) {
             *pixel = color.u32_color();
         }
         else {
@@ -111,11 +112,14 @@ impl Renderer {
 pub mod tests {
 
     use super::*;
+    const TEST_BUFFER_WIDTH: usize = 100;
+    const TEST_BUFFER_HEIGHT: usize = 50;
+    const TEST_BUFFER_SIZE: usize = TEST_BUFFER_WIDTH * TEST_BUFFER_HEIGHT;
 
-    fn init_renderer_and_buffer() -> (Renderer, [u32; 10_000]) { 
+    fn init_renderer_and_buffer() -> (Renderer, [u32; TEST_BUFFER_SIZE]) { 
         let mut renderer = Renderer::new();
-        let buffer = [0_u32; 10_000];
-        renderer.update_buffer_size(100, 100);
+        let buffer = [0_u32; TEST_BUFFER_SIZE];
+        renderer.update_buffer_size(TEST_BUFFER_WIDTH, TEST_BUFFER_HEIGHT);
 
         (renderer, buffer)
     }
@@ -129,7 +133,7 @@ pub mod tests {
             Color::WHITE
         ).unwrap();
 
-        let mut correct_buffer = [0_u32; 10_000];
+        let mut correct_buffer = [0_u32; TEST_BUFFER_SIZE];
         correct_buffer[9010] = Color::WHITE.u32_color();
 
         assert_eq!(buffer, correct_buffer);
@@ -156,7 +160,7 @@ pub mod tests {
         renderer.draw_vertex(&mut buffer, Vector2::new([20,20])).unwrap();
 
         // manually draw the vertex
-        let mut correct_buffer = [0_u32; 10_000];
+        let mut correct_buffer = [0_u32; TEST_BUFFER_SIZE];
         for x in 14..=26 {
             for y in 14..=26 {
                 renderer.draw_pixel(&mut correct_buffer, Vector2::new([x, y]), VERTEX_COLOR).unwrap();
