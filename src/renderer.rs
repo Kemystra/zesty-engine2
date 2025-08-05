@@ -13,11 +13,11 @@ pub struct Color(u32);
 
 impl Color {
     // Common colors
-    const WHITE: Self = Self(0x00_ff_ff_ff);
-    const BLACK: Self = Self(0x00_00_00_00);
-    const RED: Self = Self(0x00_ff_00_00);
-    const GREEN: Self = Self(0x00_00_ff_00);
-    const BLUE: Self = Self(0x00_00_00_ff);
+    pub const WHITE: Self = Self(0x00_ff_ff_ff);
+    pub const BLACK: Self = Self(0x00_00_00_00);
+    pub const RED: Self = Self(0x00_ff_00_00);
+    pub const GREEN: Self = Self(0x00_00_ff_00);
+    pub const BLUE: Self = Self(0x00_00_00_ff);
 
     pub fn from_rgb(r: u8, g: u8, b: u8) -> Self {
         Self (
