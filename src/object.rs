@@ -9,16 +9,16 @@ use math_utils::vector::Vector3;
 
 
 pub struct Object {
-    transform: Transform,
-    mesh: Mesh
+    pub transform: Transform,
+    pub mesh: Mesh
 }
 
 pub type Face = [u32; 3];
 
 #[derive(Debug)]
 pub struct Mesh {
-    vertices: Vec<Vector3<FloatType>>,
-    faces: Vec<Face>
+    pub vertices: Vec<Vector3<FloatType>>,
+    pub faces: Vec<Face>
 }
 
 impl Mesh {
@@ -70,13 +70,5 @@ impl Object {
             // Get the first model, since we are assuming there will only be 1 mesh
             mesh
         })
-    }
-
-    pub fn mesh(&self) -> &Mesh {
-        &self.mesh
-    }
-
-    pub fn transform(&self) -> &Transform {
-        &self.transform
     }
 }

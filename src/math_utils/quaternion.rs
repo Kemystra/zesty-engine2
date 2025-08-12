@@ -5,7 +5,6 @@ use float_cmp::ApproxEq;
 
 use super::matrix::Matrix4;
 use super::{vector::*, FloatType};
-use super::MathStruct;
 
 // This implementation of Quaternion does not care about the magnitude of itself. That is, it might
 // not be a unit quaternion.
@@ -13,8 +12,6 @@ use super::MathStruct;
 // Parameter arrangement in this implementation is Quaternion([w, x, y, z])
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Quaternion([FloatType; 4]);
-
-impl MathStruct for Quaternion {}
 
 impl Index<usize> for Quaternion {
     type Output = FloatType;

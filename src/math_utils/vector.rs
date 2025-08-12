@@ -1,7 +1,5 @@
-use std::{fmt::Debug, ops::{Index, IndexMut}};
+use std::{fmt::Debug, ops::{Index, IndexMut, Add, Sub}};
 use std::default::Default;
-
-use super::MathStruct;
 
 use num_traits::{Float, Num};
 use float_cmp::ApproxEq;
@@ -56,8 +54,6 @@ where T: Num + Copy {
     }
 }
 
-impl<const N: usize, T: ApproxEq + Float> MathStruct for Vector<N,T> {}
-
 impl<const N: usize, T: Num + Copy> Default for Vector<N,T> {
     fn default() -> Self {
         vector![T::zero(); N]
@@ -89,6 +85,31 @@ impl<const N: usize, T: Float + ApproxEq> ApproxEq for Vector<N,T> {
         }
 
         true
+    }
+}
+
+/* Arithmetic Operations */
+impl<const N: usize, T: Num + Copy> Add for Vector<N, T> {
+    type Output = Vector<N, T>;
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut output = Vector::<N,T>::new([T::zero(); N]);
+        for i in 0..N {
+            output.0[i] = self.0[i] + rhs.0[i];
+        }
+
+        output
+    }
+}
+
+impl<const N: usize, T: Num + Copy> Sub for Vector<N, T> {
+    type Output = Vector<N, T>;
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut output = Vector::<N,T>::new([T::zero(); N]);
+        for i in 0..N {
+            output.0[i] = self.0[i] - rhs.0[i];
+        }
+
+        output
     }
 }
 

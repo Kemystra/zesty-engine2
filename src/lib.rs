@@ -50,7 +50,7 @@ impl App {
 
             object: obj,
             renderer: Renderer::new(),
-            camera: Camera::new()
+            camera: Camera::new(1.0, 100.0, 60.0)
         }
     }
 }
@@ -93,9 +93,11 @@ impl ApplicationHandler for App {
                     NonZeroU32::new(height).unwrap(),
                 ).unwrap();
 
+                self.renderer.update_buffer_size(width as usize, height as usize);
+
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
                 // Render here
-                self.renderer.render(&self.object, &self.camera, &mut buffer);
+                self.renderer.render(&self.object, &self.camera, &mut buffer).unwrap();
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;
