@@ -32,7 +32,6 @@ pub struct App {
     window: Option<Rc<Window>>,
     surface: Option<Surface<Rc<Window>, Rc<Window>>>,
     redraw_count: usize,
-    args: Arguments,
 
     object: Object,
     renderer: Renderer,
@@ -46,7 +45,6 @@ impl App {
             window: None,
             surface: None,
             redraw_count: 0,
-            args,
 
             object: obj,
             renderer: Renderer::new(),
