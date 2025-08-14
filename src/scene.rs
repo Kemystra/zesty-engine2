@@ -11,7 +11,7 @@ pub struct Scene {
 
 #[derive(Serialize, Deserialize)]
 struct SceneConfig<'a> {
-    obj_filename: &'a str,
+    filename: &'a str,
     position: [FloatType; 3]
 }
 
@@ -19,7 +19,7 @@ impl Scene {
     pub fn new(filename: &str) -> Self {
         let contents = fs::read_to_string(filename).unwrap();
         let scene_config: SceneConfig = serde_json::from_str(&contents).unwrap();
-        let object = Object::new(scene_config.obj_filename).unwrap();
+        let object = Object::new(scene_config.filename).unwrap();
 
         Scene {
             object
