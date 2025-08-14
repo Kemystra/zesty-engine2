@@ -79,6 +79,8 @@ impl ApplicationHandler for App {
             },
 
             WindowEvent::RedrawRequested => {
+                self.scene.object.transform.update();
+
                 let (width, height) = {
                     let size = window_ref.inner_size();
                     (size.width, size.height)
