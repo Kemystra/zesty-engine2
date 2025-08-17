@@ -78,6 +78,11 @@ impl Transform {
         self.rotation *= q;
         self.is_dirty = true;
     }
+
+    pub fn set_position(&mut self, p: Vector3<FloatType>) {
+        self.position = p;
+        self.is_dirty = true;
+    }
 }
 
 impl Default for Transform {

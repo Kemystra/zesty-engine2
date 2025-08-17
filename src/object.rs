@@ -8,6 +8,7 @@ use math_utils::FloatType;
 use math_utils::vector::Vector3;
 
 
+#[derive(Debug)]
 pub struct Object {
     pub transform: Transform,
     pub mesh: Mesh

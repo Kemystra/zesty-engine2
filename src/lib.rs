@@ -2,7 +2,6 @@ use std::rc::Rc;
 use std::time::Instant;
 use std::num::NonZeroU32;
 
-use object::Object;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::ActiveEventLoop;
@@ -16,39 +15,37 @@ pub mod math_utils;
 pub mod transform;
 pub mod object;
 pub mod camera;
+pub mod scene;
 
 use crate::renderer::Renderer;
 use crate::camera::Camera;
+use crate::scene::Scene;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {
-    filename: String,
-    distance: f32,
-    scale: f32
+    config_filename: String
 }
 
 pub struct App {
     window: Option<Rc<Window>>,
     surface: Option<Surface<Rc<Window>, Rc<Window>>>,
     redraw_count: usize,
-    args: Arguments,
 
-    object: Object,
+    scene: Scene,
     renderer: Renderer,
     camera: Camera
 }
 
 impl App {
     pub fn new(args: Arguments) -> Self {
-        let obj = Object::new(&args.filename).expect("Error in loading file");
+        let scene = Scene::new(&args.config_filename);
         Self {
             window: None,
             surface: None,
             redraw_count: 0,
-            args,
 
-            object: obj,
+            scene,
             renderer: Renderer::new(),
             camera: Camera::new(1.0, 100.0, 60.0)
         }
@@ -82,6 +79,8 @@ impl ApplicationHandler for App {
             },
 
             WindowEvent::RedrawRequested => {
+                self.scene.object.transform.update();
+
                 let (width, height) = {
                     let size = window_ref.inner_size();
                     (size.width, size.height)
@@ -97,7 +96,7 @@ impl ApplicationHandler for App {
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
                 // Render here
-                self.renderer.render(&self.object, &self.camera, &mut buffer).unwrap();
+                self.renderer.render(&self.scene.object, &self.camera, &mut buffer).unwrap();
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;

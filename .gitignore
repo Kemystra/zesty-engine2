@@ -2,3 +2,4 @@
 /src/matrix_gen.py
 *.obj
 log.txt
+test.json
