@@ -6,6 +6,7 @@ use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::ActiveEventLoop;
 use winit::window::{Window, WindowId};
+use winit::dpi;
 
 use softbuffer::{Context, Surface};
 use clap::Parser;
@@ -54,8 +55,14 @@ impl App {
 
 impl ApplicationHandler for App {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window = Rc::new(event_loop.create_window(
-            Window::default_attributes()).unwrap()
+        let window_attr = Window::default_attributes()
+            .with_resizable(false)
+            .with_inner_size(dpi::LogicalSize::new(768, 432));
+
+        let window = Rc::new(
+            event_loop.create_window(
+                window_attr
+            ).unwrap()
         );
 
         self.window = Some(Rc::clone(&window));
