@@ -1,6 +1,7 @@
 use std::rc::Rc;
 use std::time::Instant;
 use std::num::NonZeroU32;
+use std::f32::consts::PI;
 
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
@@ -18,6 +19,7 @@ pub mod object;
 pub mod camera;
 pub mod scene;
 
+use crate::math_utils::quaternion::Quaternion;
 use crate::renderer::{RenderType, Renderer};
 use crate::camera::Camera;
 use crate::scene::Scene;
@@ -91,8 +93,14 @@ impl ApplicationHandler for App {
             },
 
             WindowEvent::RedrawRequested => {
-                self.scene.object.transform.update();
-
+                if self.redraw_count < 10000 {
+                    let angle = 1.0 * (PI / 180.0);
+                    self.scene.object.transform.rotate(
+                        Quaternion::from_euler_angles(angle, angle, 0.0)
+                    );
+                    self.scene.object.transform.update();
+                }
+                    
                 let (width, height) = {
                     let size = window_ref.inner_size();
                     (size.width, size.height)
