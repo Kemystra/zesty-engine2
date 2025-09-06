@@ -30,6 +30,13 @@ impl Color {
     }
 }
 
+#[derive(clap::ValueEnum, Clone, Copy, Debug)]
+pub enum RenderType {
+    Vertex,
+    Edge,
+    Face
+}
+
 #[derive(Debug)]
 pub struct Renderer {
     buffer_width: usize,
@@ -43,7 +50,15 @@ pub enum RendererError {
 }
 
 impl Renderer {
-    pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
+    pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32], render_type: RenderType) -> Result<(), RendererError> {
+        match render_type {
+            RenderType::Vertex => self.vertex_render(obj, camera, buffer),
+            RenderType::Edge => unimplemented!("Not implemented yet!"),
+            RenderType::Face => unimplemented!("Not implemented yet!")
+        }
+    }
+
+    pub fn vertex_render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
         for vert in &obj.mesh.vertices {
             let world_pos = obj.transform.local_to_world(*vert);
             let cam_pos = camera.transform.world_to_local(world_pos);
