@@ -18,14 +18,17 @@ pub mod object;
 pub mod camera;
 pub mod scene;
 
-use crate::renderer::Renderer;
+use crate::renderer::{RenderType, Renderer};
 use crate::camera::Camera;
 use crate::scene::Scene;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {
-    config_filename: String
+    config_filename: String,
+
+    #[arg(short, long)]
+    render_type: renderer::RenderType
 }
 
 pub struct App {
@@ -35,6 +38,7 @@ pub struct App {
 
     scene: Scene,
     renderer: Renderer,
+    render_type: RenderType,
     camera: Camera
 }
 
@@ -48,6 +52,7 @@ impl App {
 
             scene,
             renderer: Renderer::new(),
+            render_type: args.render_type,
             camera: Camera::new(1.0, 100.0, 60.0)
         }
     }
@@ -103,7 +108,7 @@ impl ApplicationHandler for App {
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
                 // Render here
-                self.renderer.render(&self.scene.object, &self.camera, &mut buffer).unwrap();
+                self.renderer.render(&self.scene.object, &self.camera, &mut buffer, self.render_type).unwrap();
                 buffer.present().unwrap();
 
                 self.redraw_count += 1;
