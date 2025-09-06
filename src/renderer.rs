@@ -98,6 +98,41 @@ impl Renderer {
         Ok(())
     }
 
+    fn bresenham_line(
+        &mut self, color: Color,
+        buffer: &mut [u32],
+        x0: isize, y0: isize,
+        end_x: isize, end_y: isize) {
+
+        let mut curr_x = x0;
+        let mut curr_y = y0;
+
+        let dx = (end_x - curr_x).abs();
+        let dy = -(end_y - curr_y).abs();
+        let mut error = dx + dy;
+
+        let sx = if curr_x < end_x {1} else {-1};
+        let sy = if curr_y < end_y {1} else {-1};
+
+        loop {
+            self.draw_pixel(buffer, Vector2::new([curr_x as usize, curr_y as usize]), color);
+            if curr_x == end_x && curr_y == end_y {break}
+            let e2 = error * 2;
+
+            if e2 >= dy {
+                if curr_x == end_x {break}
+                error += dy;
+                curr_x += sx;
+            }
+
+            if e2 <= dx {
+                if curr_y == end_y {break}
+                error += dx;
+                curr_y += sy
+            }
+        }
+    }
+
     pub fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
         if let Some(pixel) = buffer.get_mut(position.x() + (position.y() * self.buffer_width)) {
             *pixel = color.u32_color();
