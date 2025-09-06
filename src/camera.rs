@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use crate::math_utils::vector::Vector3;
 use crate::transform::Transform;
 use crate::math_utils::FloatType;
@@ -22,7 +24,7 @@ impl ProjectionData {
         let f = f.into();
         let fov = fov.into();
 
-        let tan_half_pov = (fov * 0.5).tan();
+        let tan_half_pov = (fov * 0.5 * PI/180.0).tan();
         let near_far_diff = f - n;
         Self (
             // width scaler
