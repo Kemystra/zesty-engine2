@@ -1,5 +1,7 @@
 use thiserror::Error;
 
+use std::cmp::{max, min};
+
 use crate::math_utils::vector::{vector, Vector, Vector2, Vector3};
 use crate::math_utils::FloatType;
 use crate::object::Object;
@@ -121,47 +123,26 @@ impl Renderer {
                 continue;
             }
 
-            let screen_space_vertices: Vec<Vector2<isize>> = face_vertices
+            let screen_space_vertices: Vec<(isize, isize)> = face_vertices
                 .into_iter()
                 .map(|v| {
                     let ss = self.world_space_to_screen_space(v, camera);
-                    self.usize_vector_to_isize(ss)
+                    (ss.x() as isize, ss.y() as isize)
                 })
                 .collect();
 
-            let max_x = screen_space_vertices[0].x().max(screen_space_vertices[1].x().max(screen_space_vertices[2].x()));
-            let min_x = screen_space_vertices[0].x().min(screen_space_vertices[1].x().min(screen_space_vertices[2].x()));
-            let max_y = screen_space_vertices[0].y().max(screen_space_vertices[1].y().max(screen_space_vertices[2].y()));
-            let min_y = screen_space_vertices[0].y().min(screen_space_vertices[1].y().min(screen_space_vertices[2].y()));
-
-            // Draw the triangle
-            for x in min_x..=max_x {
-                for y in min_y..=max_y {
-                    let point = vector![x, y];
-                    let (u, v, w) = self.barycentric_coords(
-                        point,
-                        screen_space_vertices[0],
-                        screen_space_vertices[1],
-                        screen_space_vertices[2]
-                    );
-
-                    if u >= 0.0 && v >= 0.0 && w >= 0.0 {
-                        let color = match color_index % 8 {
-                            0 => Color::WHITE,
-                            1 => Color::RED,
-                            2 => Color::GREEN,
-                            3 => Color::BLUE,
-                            4 => Color::YELLOW,
-                            5 => Color::CYAN,
-                            6 => Color::MAGENTA,
-                            7 => Color::from_rgb(100, 100, 100),
-                            _ => panic!("WTF")
-                        };
-
-                        self.draw_pixel(buffer, vector![x as usize, y as usize], color)?;
-                    }
-                }
-            }
+            let color = match color_index % 8 {
+               0 => Color::WHITE,
+               1 => Color::RED,
+               2 => Color::GREEN,
+               3 => Color::BLUE,
+               4 => Color::YELLOW,
+               5 => Color::CYAN,
+               6 => Color::MAGENTA,
+               7 => Color::MAGENTA,
+               _ => Color::BLACK, // default fallback
+            };
+            self.draw_triangles(buffer, screen_space_vertices, color);
 
             color_index += 1;
         }
@@ -268,6 +249,56 @@ impl Renderer {
         }
 
         Ok(())
+    }
+
+    pub fn draw_triangles(&self, buffer: &mut [u32], triangle_tuple: Vec<(isize, isize)>, color: Color) {
+        let mut max_x = triangle_tuple[0].0;
+        let mut max_y = triangle_tuple[0].1;
+        let mut min_x = max_x;
+        let mut min_y = max_y;
+
+        for index in 1..3 {
+            let x_part = triangle_tuple[index].0;
+            let y_part = triangle_tuple[index].1;
+
+            max_x = max(x_part, max_x);
+            min_x = min(x_part, min_x);
+
+            max_y = max(y_part, max_y);
+            min_y = min(y_part, min_y);
+        }
+
+        let edge_results = triangle_tuple.iter().enumerate().map(|pair| {
+            let (i, point) = pair;
+            let next_point = triangle_tuple[(i+1) % 3];
+            let diff_x = point.0 - next_point.0;
+            let diff_y = point.1 - next_point.1;
+
+            // Based on the edge function
+            let first_result = ((min_y - point.1) * diff_x) - ((min_x - point.0) * diff_y);
+            (first_result, diff_x, diff_y)
+        }).collect::<Vec<(isize, isize, isize)>>();
+
+        for offset_x in 0..(max_x - min_x) {
+            for offset_y in 0..(max_y - min_y) {
+                let not_in_triangle = edge_results.iter().any(|results_group| {
+                    let (first_result, diff_x, diff_y) = results_group;
+                    let curr_result = first_result + (diff_x*offset_y) - (diff_y*offset_x);
+
+                    curr_result < 0
+                });
+
+                if not_in_triangle { continue; }
+                self.draw_pixel(
+                    buffer,
+                    vector![
+                        (min_x + offset_x) as usize,
+                        (min_y + offset_y) as usize
+                    ],
+                    color
+                );
+            }
+        }
     }
 
     pub fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
