@@ -1,6 +1,7 @@
 use std::rc::Rc;
 use std::time::Instant;
 use std::num::NonZeroU32;
+use std::f32::consts::PI;
 
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
@@ -18,6 +19,7 @@ pub mod object;
 pub mod camera;
 pub mod scene;
 
+use crate::math_utils::quaternion::Quaternion;
 use crate::renderer::{RenderType, Renderer};
 use crate::camera::Camera;
 use crate::scene::Scene;
@@ -71,8 +73,8 @@ impl ApplicationHandler for App {
         );
 
         self.window = Some(Rc::clone(&window));
-        let context = Context::new(Rc::clone(&window)).unwrap();
-        self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
+        let context = Context::new(window.clone()).unwrap();
+        self.surface = Some(Surface::new(&context, window.clone()).unwrap());
         self.redraw_count = 0;
     }
 
@@ -91,8 +93,12 @@ impl ApplicationHandler for App {
             },
 
             WindowEvent::RedrawRequested => {
+                let angle = 0.5 * (PI / 180.0);
+                self.scene.object.transform.rotate(
+                    Quaternion::from_euler_angles(angle, angle, angle)
+                );
                 self.scene.object.transform.update();
-
+                    
                 let (width, height) = {
                     let size = window_ref.inner_size();
                     (size.width, size.height)
@@ -107,6 +113,10 @@ impl ApplicationHandler for App {
                 self.renderer.update_buffer_size(width as usize, height as usize);
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
+
+                // Clear the buffer first
+                buffer.fill(0);
+
                 // Render here
                 self.renderer.render(&self.scene.object, &self.camera, &mut buffer, self.render_type).unwrap();
                 buffer.present().unwrap();

@@ -1,12 +1,14 @@
 use thiserror::Error;
 
-use crate::math_utils::vector::Vector2;
+use crate::math_utils::vector::{Vector2, Vector3};
 use crate::math_utils::FloatType;
 use crate::object::Object;
 use crate::camera::Camera;
+use crate::transform::Transform;
 
 const VERTEX_SIZE: usize = 13;
 const VERTEX_COLOR: Color = Color::WHITE;
+const EDGE_COLOR: Color = Color::WHITE;
 
 #[derive(Clone, Copy)]
 pub struct Color(u32);
@@ -53,27 +55,58 @@ impl Renderer {
     pub fn render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32], render_type: RenderType) -> Result<(), RendererError> {
         match render_type {
             RenderType::Vertex => self.vertex_render(obj, camera, buffer),
-            RenderType::Edge => unimplemented!("Not implemented yet!"),
+            RenderType::Edge => self.edge_render(obj, camera, buffer),
             RenderType::Face => unimplemented!("Not implemented yet!")
         }
     }
 
     pub fn vertex_render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
         for vert in &obj.mesh.vertices {
-            let world_pos = obj.transform.local_to_world(*vert);
-            let cam_pos = camera.transform.world_to_local(world_pos);
-            let ncd_pos = camera.project_to_ncd_space(cam_pos);
-            let screen_pos = Vector2::new([
-                (((ncd_pos.x() + 1.0) * 0.5) * self.buffer_width as FloatType) as usize,
-                (((ncd_pos.y() + 1.0) * 0.5) * self.buffer_height as FloatType) as usize
-            ]);
-
+            let screen_pos = self.obj_space_to_screen_space(*vert, &obj.transform, camera);
             self.draw_vertex(buffer, screen_pos)?;
         }
         // Perform rasterization
         // Draw to buffer
 
         Ok(())
+    }
+
+    pub fn edge_render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
+        for face in &obj.mesh.faces {
+            for i in 0..3 {
+                let edge = [face[i], face[(i+1) % 3]];
+                let p1 = self.obj_space_to_screen_space(
+                    obj.mesh.vertices[edge[0] as usize],
+                    &obj.transform,
+                    camera
+                );
+                let p2 = self.obj_space_to_screen_space(
+                    obj.mesh.vertices[edge[1] as usize],
+                    &obj.transform,
+                    camera
+                );
+                self.bresenham_line(
+                    EDGE_COLOR,
+                    buffer,
+                    p1.x() as isize, p1.y() as isize,
+                    p2.x() as isize, p2.y() as isize
+                );
+            }
+        }
+
+        Ok(())
+    }
+
+    fn obj_space_to_screen_space(&self, position: Vector3<FloatType>, obj_transform: &Transform, camera: &Camera) -> Vector2<usize> {
+        let world_pos = obj_transform.local_to_world(position);
+        let cam_pos = camera.transform.world_to_local(world_pos);
+        let ncd_pos = camera.project_to_ncd_space(cam_pos);
+        let screen_pos = Vector2::new([
+            (((ncd_pos.x() + 1.0) * 0.5) * self.buffer_width as FloatType) as usize,
+            (((ncd_pos.y() + 1.0) * 0.5) * self.buffer_height as FloatType) as usize
+        ]);
+
+        screen_pos
     }
 
     // Draw a square of `SIDE_LENGTH` centered at `center`
@@ -96,6 +129,41 @@ impl Renderer {
         }
 
         Ok(())
+    }
+
+    fn bresenham_line(
+        &self, color: Color,
+        buffer: &mut [u32],
+        x0: isize, y0: isize,
+        end_x: isize, end_y: isize) {
+
+        let mut curr_x = x0;
+        let mut curr_y = y0;
+
+        let dx = (end_x - curr_x).abs();
+        let dy = -(end_y - curr_y).abs();
+        let mut error = dx + dy;
+
+        let sx = if curr_x < end_x {1} else {-1};
+        let sy = if curr_y < end_y {1} else {-1};
+
+        loop {
+            self.draw_pixel(buffer, Vector2::new([curr_x as usize, curr_y as usize]), color);
+            if curr_x == end_x && curr_y == end_y {break}
+            let e2 = error * 2;
+
+            if e2 >= dy {
+                if curr_x == end_x {break}
+                error += dy;
+                curr_x += sx;
+            }
+
+            if e2 <= dx {
+                if curr_y == end_y {break}
+                error += dx;
+                curr_y += sy
+            }
+        }
     }
 
     pub fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {
