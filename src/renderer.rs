@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::math_utils::vector::{Vector2, Vector3};
+use crate::math_utils::vector::{vector, Vector, Vector2, Vector3};
 use crate::math_utils::FloatType;
 use crate::object::Object;
 use crate::camera::Camera;
@@ -60,7 +60,7 @@ impl Renderer {
         match render_type {
             RenderType::Vertex => self.vertex_render(obj, camera, buffer),
             RenderType::Edge => self.edge_render(obj, camera, buffer),
-            RenderType::Face => unimplemented!("Not implemented yet!")
+            RenderType::Face => self.face_render(obj, camera, buffer)
         }
     }
 
@@ -94,16 +94,114 @@ impl Renderer {
                     buffer,
                     p1.x() as isize, p1.y() as isize,
                     p2.x() as isize, p2.y() as isize
-                );
+                )?;
             }
         }
 
         Ok(())
     }
 
+    pub fn face_render(&self, obj: &Object, camera: &Camera, buffer: &mut [u32]) -> Result<(), RendererError> {
+        let mut color_index = 0;
+        for face in &obj.mesh.faces {
+            // Check for face normals
+            let face_vertices: Vec<Vector3<FloatType>> = face
+                .iter()
+                .map(|i| obj.transform.local_to_world(obj.mesh.vertices[*i as usize]))
+                .collect();
+            let edge_vector1 = face_vertices[1] - face_vertices[0];
+            let edge_vector2 = face_vertices[2] - face_vertices[0];
+            let face_normal = edge_vector1.cross_product(edge_vector2);
+
+            let dot_product = face_normal * camera.transform.z_axis();
+
+            // Skip if the face is facing away from camera
+            // It seems like maybe our camera have an inverted z-axis
+            if dot_product.is_sign_positive() {
+                continue;
+            }
+
+            let screen_space_vertices: Vec<Vector2<isize>> = face_vertices
+                .into_iter()
+                .map(|v| {
+                    let ss = self.world_space_to_screen_space(v, camera);
+                    self.usize_vector_to_isize(ss)
+                })
+                .collect();
+
+            let max_x = screen_space_vertices[0].x().max(screen_space_vertices[1].x().max(screen_space_vertices[2].x()));
+            let min_x = screen_space_vertices[0].x().min(screen_space_vertices[1].x().min(screen_space_vertices[2].x()));
+            let max_y = screen_space_vertices[0].y().max(screen_space_vertices[1].y().max(screen_space_vertices[2].y()));
+            let min_y = screen_space_vertices[0].y().min(screen_space_vertices[1].y().min(screen_space_vertices[2].y()));
+
+            // Draw the triangle
+            for x in min_x..=max_x {
+                for y in min_y..=max_y {
+                    let point = vector![x, y];
+                    let (u, v, w) = self.barycentric_coords(
+                        point,
+                        screen_space_vertices[0],
+                        screen_space_vertices[1],
+                        screen_space_vertices[2]
+                    );
+
+                    if u >= 0.0 && v >= 0.0 && w >= 0.0 {
+                        let color = match color_index % 8 {
+                            0 => Color::WHITE,
+                            1 => Color::RED,
+                            2 => Color::GREEN,
+                            3 => Color::BLUE,
+                            4 => Color::YELLOW,
+                            5 => Color::CYAN,
+                            6 => Color::MAGENTA,
+                            7 => Color::from_rgb(100, 100, 100),
+                            _ => panic!("WTF")
+                        };
+
+                        self.draw_pixel(buffer, vector![x as usize, y as usize], color)?;
+                    }
+                }
+            }
+
+            color_index += 1;
+        }
+
+        Ok(())
+    }
+
+    fn usize_vector_to_isize(&self, v: Vector2<usize>) -> Vector2<isize> {
+        vector![
+            v.x() as isize,
+            v.y() as isize
+        ]
+    }
+
+    fn barycentric_coords(&self, point: Vector2<isize>, a: Vector2<isize>, b: Vector2<isize>, c: Vector2<isize>) -> (FloatType, FloatType, FloatType) {
+        let v0 = c - a;
+        let v1 = b - a;
+        let v2 = point - a;
+
+        let dot00 = (v0 * v0) as FloatType;
+        let dot01 = (v0 * v1) as FloatType;
+        let dot02 = (v0 * v2) as FloatType;
+        let dot11 = (v1 * v1) as FloatType;
+        let dot12 = (v1 * v2) as FloatType;
+
+        let inv_denom = 1.0 / (dot00 * dot11 - dot01 * dot01);
+        let u = (dot11 * dot02 - dot01 * dot12) * inv_denom;
+        let v = (dot00 * dot12 - dot01 * dot02) * inv_denom;
+        let w = 1.0 - u - v;
+
+        (w, v, u)
+    }
+
     fn obj_space_to_screen_space(&self, position: Vector3<FloatType>, obj_transform: &Transform, camera: &Camera) -> Vector2<usize> {
         let world_pos = obj_transform.local_to_world(position);
-        let cam_pos = camera.transform.world_to_local(world_pos);
+        self.world_space_to_screen_space(world_pos, camera)
+    }
+
+    fn world_space_to_screen_space(&self, position: Vector3<FloatType>, camera: &Camera) -> Vector2<usize> {
+        let cam_pos = camera.transform.world_to_local(position);
         let ncd_pos = camera.project_to_ncd_space(cam_pos);
         let screen_pos = Vector2::new([
             (((ncd_pos.x() + 1.0) * 0.5) * self.buffer_width as FloatType) as usize,
@@ -139,7 +237,7 @@ impl Renderer {
         &self, color: Color,
         buffer: &mut [u32],
         x0: isize, y0: isize,
-        end_x: isize, end_y: isize) {
+        end_x: isize, end_y: isize) -> Result<(), RendererError> {
 
         let mut curr_x = x0;
         let mut curr_y = y0;
@@ -152,7 +250,7 @@ impl Renderer {
         let sy = if curr_y < end_y {1} else {-1};
 
         loop {
-            self.draw_pixel(buffer, Vector2::new([curr_x as usize, curr_y as usize]), color);
+            self.draw_pixel(buffer, Vector2::new([curr_x as usize, curr_y as usize]), color)?;
             if curr_x == end_x && curr_y == end_y {break}
             let e2 = error * 2;
 
@@ -168,6 +266,8 @@ impl Renderer {
                 curr_y += sy
             }
         }
+
+        Ok(())
     }
 
     pub fn draw_pixel(&self, buffer: &mut [u32], position: Vector2<usize>, color: Color) -> Result<(), RendererError> {

@@ -95,7 +95,7 @@ impl ApplicationHandler for App {
             WindowEvent::RedrawRequested => {
                 let angle = 0.5 * (PI / 180.0);
                 self.scene.object.transform.rotate(
-                    Quaternion::from_euler_angles(angle, angle, angle)
+                    Quaternion::from_euler_angles(0.0, angle, 0.0)
                 );
                 self.scene.object.transform.update();
                     
