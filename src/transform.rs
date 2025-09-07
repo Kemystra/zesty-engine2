@@ -4,7 +4,7 @@ use crate::math_utils;
 use math_utils::{FloatType, transform_3d_point};
 use math_utils::matrix::Matrix4;
 use math_utils::quaternion::Quaternion;
-use math_utils::vector::Vector3;
+use math_utils::vector::{vector, Vector, Vector3};
 
 
 // Any operation that impacts the field `matrix` must set the dirty flag
@@ -82,6 +82,24 @@ impl Transform {
     pub fn set_position(&mut self, p: Vector3<FloatType>) {
         self.position = p;
         self.is_dirty = true;
+    }
+
+    pub fn x_axis(&self) -> Vector3<FloatType> {
+        self.local_to_world(
+            vector![1.0, 0.0, 0.0]
+        )
+    }
+
+    pub fn y_axis(&self) -> Vector3<FloatType> {
+        self.local_to_world(
+            vector![0.0, 1.0, 0.0]
+        )
+    }
+
+    pub fn z_axis(&self) -> Vector3<FloatType> {
+        self.local_to_world(
+            vector![0.0, 0.0, 1.0]
+        )
     }
 }
 
