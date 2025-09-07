@@ -115,6 +115,10 @@ impl ApplicationHandler for App {
                 self.renderer.update_buffer_size(width as usize, height as usize);
 
                 let mut buffer = surface_mut_ref.buffer_mut().unwrap();
+
+                // Clear the buffer first
+                buffer.fill(0);
+
                 // Render here
                 self.renderer.render(&self.scene.object, &self.camera, &mut buffer, self.render_type).unwrap();
                 buffer.present().unwrap();
