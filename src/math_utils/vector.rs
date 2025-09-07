@@ -1,4 +1,4 @@
-use std::{fmt::Debug, ops::{Index, IndexMut, Add, Sub}};
+use std::{fmt::Debug, ops::{Index, IndexMut, Add, Sub, Mul}};
 use std::default::Default;
 
 use num_traits::{Float, Num};
@@ -110,6 +110,14 @@ impl<const N: usize, T: Num + Copy> Sub for Vector<N, T> {
         }
 
         output
+    }
+}
+
+impl<const N: usize, T: Num + Copy> Mul for Vector<N, T> {
+    type Output = T;
+    fn mul(self, rhs: Self) -> Self::Output {
+        let element_pairs = self.0.into_iter().zip(rhs.0.into_iter());
+        element_pairs.fold(T::zero(), |acc, (a,b)| acc + (a*b))
     }
 }
 
