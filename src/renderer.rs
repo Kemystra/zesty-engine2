@@ -9,17 +9,21 @@ use crate::transform::Transform;
 const VERTEX_SIZE: usize = 13;
 const VERTEX_COLOR: Color = Color::WHITE;
 const EDGE_COLOR: Color = Color::WHITE;
+const FACE_COLOR: Color = Color::WHITE;
 
 #[derive(Clone, Copy)]
 pub struct Color(u32);
 
 impl Color {
     // Common colors
-    pub const WHITE: Self = Self(0x00_ff_ff_ff);
     pub const BLACK: Self = Self(0x00_00_00_00);
+    pub const WHITE: Self = Self(0x00_ff_ff_ff);
     pub const RED: Self = Self(0x00_ff_00_00);
     pub const GREEN: Self = Self(0x00_00_ff_00);
     pub const BLUE: Self = Self(0x00_00_00_ff);
+    pub const YELLOW: Self = Self(0x00_ff_ff_00);
+    pub const CYAN: Self = Self(0x00_00_ff_ff);
+    pub const MAGENTA: Self = Self(0x00_ff_00_ff);
 
     pub fn from_rgb(r: u8, g: u8, b: u8) -> Self {
         Self (
