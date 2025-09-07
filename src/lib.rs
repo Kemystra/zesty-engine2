@@ -73,8 +73,8 @@ impl ApplicationHandler for App {
         );
 
         self.window = Some(Rc::clone(&window));
-        let context = Context::new(Rc::clone(&window)).unwrap();
-        self.surface = Some(Surface::new(&context, Rc::clone(&window)).unwrap());
+        let context = Context::new(window.clone()).unwrap();
+        self.surface = Some(Surface::new(&context, window.clone()).unwrap());
         self.redraw_count = 0;
     }
 
@@ -93,13 +93,11 @@ impl ApplicationHandler for App {
             },
 
             WindowEvent::RedrawRequested => {
-                if self.redraw_count < 10000 {
-                    let angle = 1.0 * (PI / 180.0);
-                    self.scene.object.transform.rotate(
-                        Quaternion::from_euler_angles(angle, angle, 0.0)
-                    );
-                    self.scene.object.transform.update();
-                }
+                let angle = 0.5 * (PI / 180.0);
+                self.scene.object.transform.rotate(
+                    Quaternion::from_euler_angles(angle, angle, angle)
+                );
+                self.scene.object.transform.update();
                     
                 let (width, height) = {
                     let size = window_ref.inner_size();
