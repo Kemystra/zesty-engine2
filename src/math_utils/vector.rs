@@ -115,7 +115,7 @@ impl<const N: usize, T: Num + Copy> Sub for Vector<N, T> {
 
 /* Vector2 & Vector3 specific operations */
 impl<T: Num + Copy> Vector<3, T> {
-    pub fn cross_product(&self, rhs: &Self) -> Self {
+    pub fn cross_product(&self, rhs: Self) -> Self {
         vector![
             self.y() * rhs.z() - self.z() * rhs.y(),
             self.z() * rhs.x() - self.x() * rhs.z(),
@@ -125,7 +125,7 @@ impl<T: Num + Copy> Vector<3, T> {
 }
 
 impl<T: Num + Copy> Vector<2, T> {
-    pub fn cross_product(&self, rhs: &Self) -> T {
+    pub fn cross_product(&self, rhs: Self) -> T {
         self.x() * rhs.y() - self.y() * rhs.x()
     }
 }
