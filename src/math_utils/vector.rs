@@ -113,6 +113,23 @@ impl<const N: usize, T: Num + Copy> Sub for Vector<N, T> {
     }
 }
 
+/* Vector2 & Vector3 specific operations */
+impl<T: Num + Copy> Vector<3, T> {
+    pub fn cross_product(&self, rhs: &Self) -> Self {
+        vector![
+            self.y() * rhs.z() - self.z() * rhs.y(),
+            self.z() * rhs.x() - self.x() * rhs.z(),
+            self.x() * rhs.y() - self.y() * rhs.x()
+        ]
+    }
+}
+
+impl<T: Num + Copy> Vector<2, T> {
+    pub fn cross_product(&self, rhs: &Self) -> T {
+        self.x() * rhs.y() - self.y() * rhs.x()
+    }
+}
+
 impl<const N: usize, T> Debug for Vector<N,T>
 where T: Debug {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
